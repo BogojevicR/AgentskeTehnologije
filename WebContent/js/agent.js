@@ -1,24 +1,12 @@
-var app= angular.module("agentApp",[]);
+var app= angular.module('agentApp',['ui.router',
+                        'agent.services','agent.controllers']);
 
-app.controller("agent",function($scope,$rootScope,$window,$http){
-	
-	var location = window.location.href;
-	
-	var host;
-	
-	$scope.init = function() {
-	console.log(location);
-	
-	var index = location.indexOf("//");
-	host = location.substr(index+2);
-	
-	host = host.substr(0, host.indexOf("/"));
-	
-	$rootScope.host = host;
-	
-	console.log(host);
-	
-	
-	}
-	
-});
+app.config(function($stateProvider) {
+	$stateProvider
+	.state('home', {
+		url:'/',
+		templateUrl:'/index.html',
+		controller:'agentController'
+	})
+})
+
