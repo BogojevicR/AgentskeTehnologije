@@ -27,7 +27,7 @@ import models.AgentCenter;
 public class AgentService {
 	
 	
-	
+	//dobavi listu svih tipova agenata na sistemu;
 	@GET
 	@Path("/classes")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -36,7 +36,7 @@ public class AgentService {
 		return new ObjectMapper().writeValueAsString(Data.getAgentTypes());
 	}
 	
-	
+	//dobavi listu agentskih centara
 	@GET
 	@Path("/centers")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +45,8 @@ public class AgentService {
 		return new ObjectMapper().writeValueAsString(Data.getAgentCenters());
 	}
 	
+	
+	//dobavi sve pokrenute agente sa sistema;
 	@GET
 	@Path("/running")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -53,13 +55,15 @@ public class AgentService {
 		return new ObjectMapper().writeValueAsString(Data.getRunningAID());
 	}
 	
+	//pokreni agenta odredjenog tipa sa zadatim imenom
 	@PUT
 	@Path("/running/{type}/{name}")
 	public void activateAgent(@PathParam("type")String type, @PathParam("name")String name) {
 		
-		
+		//TODO: ZAVRSI POKRATANJE AGENATA
 	}
 	
+	//zaustavi odredenog agenta
 	@DELETE
 	@Path("/running/{aid}")
 	public void stopAgent(@PathParam("aid")String aidJSON) throws JsonParseException, JsonMappingException, IOException {
