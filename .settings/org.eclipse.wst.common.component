@@ -2,7 +2,7 @@
     <wb-module deploy-name="AgentApp">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="AgentApp"/>
         <property name="java-output-path" value="/AgentApp/build/classes"/>
+        <property name="context-root" value="AgentApp"/>
     </wb-module>
 </project-modules>
