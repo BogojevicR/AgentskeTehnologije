@@ -10,6 +10,8 @@ import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import helper.CenterInfo;
+
 
 
 
@@ -37,8 +39,7 @@ public class JMSMessage implements MessageListener{
 			
 			// create and publish a message
 			TextMessage msg = session.createTextMessage();
-			//TODO: create other way to get agent center and its adress
-		//	msg.setStringProperty("host", Constants.getAgentCenter().getAddress());
+			msg.setStringProperty("host", CenterInfo.getAgentCenter().getAddress());
 			msg.setText(chatPair);
 			MessageProducer producer = session.createProducer(topic);
 			producer.send(msg);
