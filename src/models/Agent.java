@@ -3,7 +3,7 @@ package models;
 
 
 public class Agent {
-private AID id;
+	private AID id;
 	
 	public Agent() {
 		

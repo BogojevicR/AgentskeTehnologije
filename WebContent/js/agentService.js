@@ -31,6 +31,10 @@ services.service('agentService', ['$http', '$rootScope',
 		this.getPerformative = function(location) {
 			return $http.get(location + "rest/messages");
 		}
+		
+		this.sendACLMessage = function(ACLMessage, location) {
+			return $http.post(location + "rest/messages", ACLMessage);
+		}
 	}
 
 	
