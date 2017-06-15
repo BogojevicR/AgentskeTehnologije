@@ -14,8 +14,10 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import data.Data;
+import jms.JMSMessage;
 import models.AID;
 import models.AgentCenter;
+import requests.Requests;
 
 @Path("center")
 public class AgentCenterService {
@@ -67,7 +69,21 @@ public class AgentCenterService {
 		//TODO:Zavrsiti
 	}
 	
+	@POST
+	@Path("/new_message")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void newMessage(String aclMessageJSON) {
+		new JMSMessage(aclMessageJSON);
+	}
 	
+	public static void sendChangeToSpecific(String url, Object object, AgentCenter agentCenter) {
+		try {
+			String jsonInString = new ObjectMapper().writeValueAsString(object);
+			new Requests().makePostRequest("http://"+agentCenter.getAddress()+"/AgentApp/rest"+url, jsonInString);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	//TODO:Fale ova 2 dugacka 
 	
 	

@@ -16,7 +16,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-
+import helper.Message;
 import models.ACLMessage;
 
 
@@ -31,7 +31,7 @@ public class MessageService {
 	public void postMessages(String messageJSON) throws JsonParseException, JsonMappingException, IOException {
 		
 		ACLMessage message = new ObjectMapper().readValue(messageJSON, ACLMessage.class);
-		
+		Message.sendMessage(message);
 		//TODO: ZAVRSI SLANJE PORUKE 
 	}
 	
