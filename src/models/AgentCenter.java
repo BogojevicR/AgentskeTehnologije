@@ -5,6 +5,7 @@ public class AgentCenter {
 	private String alias;
 	private String address;
 	
+	
 	public AgentCenter() {
 		
 	}
