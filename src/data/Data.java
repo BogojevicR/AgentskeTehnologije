@@ -22,10 +22,7 @@ public class Data {
 	
 	static {
 		AgentCenter ac=new AgentCenter("localhost:8180","localhost:8180");
-<<<<<<< HEAD
-=======
 		CenterInfo.setAgentCenter(ac);
->>>>>>> origin/master
 		AgentType at1=new AgentType("at1","at1");
 		AID aid=new AID("aid",ac,at1);
 		Agent a=new Agent(aid);
