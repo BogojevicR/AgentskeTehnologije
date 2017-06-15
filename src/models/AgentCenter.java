@@ -38,10 +38,8 @@ public class AgentCenter {
 	public boolean isMaster(){
 		String port=this.address.substring(10,this.address.length());
 		if(port.equals("8080")){
-			
 			return true;
 		}
-		
 		return false;
 	}
 	
