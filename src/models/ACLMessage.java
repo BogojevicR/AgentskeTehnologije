@@ -8,6 +8,7 @@ import java.util.Map;
 
 
 
+
 public class ACLMessage {
 
 
@@ -224,6 +225,21 @@ public class ACLMessage {
 		return sender != null || replyTo != null;
 	}
 	
-	
+	public ACLMessage makeReply(Performative performative) {
+		if (!canReplyTo())
+			throw new IllegalArgumentException("There's no-one to receive the reply.");
+		ACLMessage reply = new ACLMessage(performative);
+		// receiver
+		reply.receivers.add(replyTo != null ? replyTo : sender);
+		// description of content
+		reply.language = language;
+		reply.ontology = ontology;
+		reply.encoding = encoding;
+		// control of conversation
+		reply.protocol = protocol;
+		reply.conversationId = conversationId;
+		reply.inReplyTo = replyWith;
+		return reply;
+	}
 	
 }

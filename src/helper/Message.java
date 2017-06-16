@@ -1,6 +1,7 @@
 package helper;
 
 import models.AgentCenter;
+import services.AgentCenterService;
 import models.AID;
 import data.Data;
 import models.ACLMessage;
@@ -15,9 +16,9 @@ public class Message {
 					exists = true;
 				}
 			}
-		/*	if (exists) {
-				Synchronize.sendChangeToSpecific("/synchronize/new_message", message, center);
-			}*/
+			if (exists) {
+				AgentCenterService.sendChangeToSpecific("/synchronize/new_message", message, center);
+			}
 		}
 		//new SendJMSMessage(Converter.getJSONString(message));
 		
