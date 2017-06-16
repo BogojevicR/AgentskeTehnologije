@@ -4,8 +4,8 @@
 
 var app = angular.module('agent.controllers',[]);
 
-app.controller('agentController', ['$http','agentService', '$window',
-function($http, agentService, $window) {
+app.controller('agentController', ['$http','$scope','$rootScope','agentService', '$window',
+function($http,$scope, $rootScope, agentService, $window) {
 	var location = $window.location.href;
 	
 	var host;
