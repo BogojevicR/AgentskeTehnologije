@@ -4,8 +4,8 @@
 
 var app = angular.module('agent.controllers',[]);
 
-app.controller('agentController', ['$http','agentService', '$window',
-function($http, agentService, $window) {
+app.controller('agentController', ['$http','$rootScope','$scope','agentService', '$window',
+function($http,$scope,$rootScope, agentService, $window) {
 	var location = $window.location.href;
 	
 	var host;
@@ -14,6 +14,7 @@ function($http, agentService, $window) {
 	$scope.running = [];
 	$scope.centers = [];
 	$scope.types = [];
+	$scope.receivers=[];
 	
 	
 	$scope.init = function() {
@@ -22,8 +23,13 @@ function($http, agentService, $window) {
 		var index = location.indexOf("//");
 		host = location.substr(index+2);
 		host = host.substr(0, host.indexOf("/"));
-		
+		$scope.addReceiver();
+		$scope.getPerformative();
+		$scope.getClasses();
+		$scope.getRunning();
+		$scope.addReceiver();
 		$rootScope.host = host;
+		
 		console.log(host);
 	}
 	

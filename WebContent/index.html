@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="agentApp">
+<html ng-app="agentApp" ng-controller="agentController">
 <head>
 <meta charset="ISO-8859-1">
 <title>AgentApp</title>
@@ -7,14 +7,205 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.js"></script>
     <script	src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
-
+	
 	<script src="js/agent.js"></script>
 	<script src="js/agentService.js"></script>
 	<script src="js/agentController.js"></script>
 </head>
-<body>
-<div ng-init="init()">
+<body ng-init="init()">
+
  {{host}}
-</div>
+<table  width="100%"  style="margin: 0px;">
+	<tr >
+		<td valign="top" align="center" width="30%"  >
+	  		<div >
+			<h2>Types of agents</h2>
+			<table style="max-width: 500px" border = 1 ng-repeat="type in types track by $index">
+				<tr >
+					<td style="width: 80%;" align="center" >
+						{{ type.name }}
+					</td>
+				</tr>
+				<tr align="center"  class="add" id="{{type.name}}">
+					<td>
+						<table >
+							<tr>
+								<td align="center">{{ type.name }} Agent Name:</td>
+							</tr>
+							<tr>
+								<td><input class="newAgentName" ng-model="agent_name" style="width: 100%"></td>
+							</tr>	
+							<tr>
+								<td align="center"><button ng-click="createAgent(agent_name, type.name)">Add {{type.name}} agent</button>
+							</tr>
+						</table>
+					</td>
+				</tr>	
+		</table>
+		</div>
+	 </td>
+	 <td valign="top" align="center" width="20%" >
+	 	<h2>Send message</h2>
+	 		<table  style="max-width: 500px">
+		    	<tr >
+		        	<td>
+		        		Performative:
+		            </td>
+		            <td>
+		            	<select style="width: 100%" ng-model="perform">
+							<option ng-repeat="perf in performative" value="{{perf}}">{{perf}}</option>
+						</select>
+		            </td>
+				</tr>
+				<tr >
+		       		<td>
+		            	Sender:
+		            </td>
+		            <td>
+		            	<select ng-model="sender" style="width: 100%">
+							<option ng-repeat="id in running" value="{{id}}">{{id.type.name}} : {{id.name}}</option>
+						</select>
+		            </td>
+		     	</tr>
+				<tr ng-repeat="receiver in receivers track by $index">
+		            <td>
+		            	Receiver{{$index + 1}}:
+		            </td>
+		            </td>
+		            <td>
+		               <table style="width: 100%">
+		                	<tr>
+			                	<td>
+					                <select ng-model="receivers[$index]" style="width: 100%;">
+										<option ng-repeat="id in running" value="{{id}}">{{id.type.name}} : {{id.name}}</option>
+									</select>
+								</td>
+								<td align="right" ng-if="$index == 0" width="20px">					    
+					            	<button  ng-click="addReceiver()">+</button>
+					            </td>
+					            <td align="right" ng-if="$index != 0" width="20px">
+					            	<button  ng-click="removeReceiver($index)">-</button>
+					            	
+					            </td>
+							</tr>
+						</table>
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Reply to:
+		            </td>
+		            <td>
+		                <select ng-model="replyTo" style="width: 100%">
+							<option ng-repeat="id in running" value="{{id}}">{{id.type.name}} : {{id.name}}</option>
+						</select>
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Content:
+		            </td>
+		            <td>
+		                <input ng-model="content" type="text" value="" style="width: 100%">
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Language:
+		            </td>
+		            <td>
+		                <input ng-model="language" type="text" value="" style="width: 100%">
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Encoding:
+		            </td>
+		            <td>
+		                <input ng-model="encoding" type="text" value="" style="width: 100%">
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Ontology:
+		            </td>
+		            <td>
+		                <input ng-model="ontology" type="text" value="" style="width: 100%">
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Protocol:
+		            </td>
+		            <td>
+		            	<input ng-model="protocol" type="text" value="" style="width: 100%">
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Conversation ID:
+		            </td>
+		            <td>
+		                <input ng-model="conversationId" type="text" value="" style="width: 100%">
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Reply with:
+		            </td>
+		            <td>
+		                <input ng-model="replyWith" type="text" value="" style="width: 100%">
+		            </td>
+		        </tr>
+		        <tr >
+		            <td>
+		            	Reply by:
+		            </td>
+		        	<td>
+		                <input ng-model="replyBy" type="number" value="" style="width: 100%">
+		            </td>
+		       	</tr>
+		        <tr align="center">
+		            <td colspan=2>
+		            	<button ng-click="sendACLMessage(perform, sender, replyTo, content, language, encoding, ontology, protocol, conversationId, replyWith, replyBy)">Send ACL message</button>
+		            </td>
+		        </tr>
+	    	</table>
+		</td>	
+		<td valign="top" align="center" width="50%">
+ 			<div>
+		<div ng-if="running.length != 0" style="display: inline-block; width: 100%">
+			<h2>Running agents</h2>
+			<div ng-repeat="type in types track by $index" style="width: 100%">
+				<h3>{{type.name}}:</h3>
+				<table border = 1 style="table-layout:fixed; width: 100%">
+					<tr>
+						<th width="34%">Name</th>
+						<th width="33%">Host</th>
+						<th width="30px">Stop</th>
+					</tr>
+					<tr ng-repeat="id in running track by $index" ng-if="type.name==id.type.name">
+						<td style="word-wrap:break-word">
+							{{ id.name }}
+						</td>
+						<td >
+							{{ id.host.address}}
+						</td>
+						<td align="center" ng-if="id.host.address == hostport">
+							<button ng-click="stopAgent(id)">Stop</button>
+						</td>
+						<td align="center" ng-if="id.host.address != hostport">
+							<font size=1>Not my</font>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+ 		</td>
+ 	</tr>
+ 
+</table>
+
 </body>
 </html>

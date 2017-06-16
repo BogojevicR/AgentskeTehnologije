@@ -32,7 +32,7 @@ public class AgentService {
 	@Path("/classes")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getClasses() throws JsonGenerationException, JsonMappingException, IOException {
-		System.out.println("USAO U CLASSES REST");
+		
 		return new ObjectMapper().writeValueAsString(Data.getAgentTypes());
 	}
 	

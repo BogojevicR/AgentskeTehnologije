@@ -21,15 +21,20 @@ public class Data {
 	private static List<AID> runningAID = new ArrayList<>();
 	
 	static {
-		AgentCenter ac=new AgentCenter("localhost:8180","localhost:8180");
+		AgentCenter ac=new AgentCenter("localhost:8080","localhost:8080");
 		CenterInfo.setAgentCenter(ac);
-		AgentType at1=new AgentType("at1","at1");
-		AID aid=new AID("aid",ac,at1);
+		AgentType ping=new AgentType("Ping","Ping");
+		AgentType pong=new AgentType("Pong","Pong");
+		AID aid=new AID("Ping",ac,ping);
+		AID aid2=new AID("Pong",ac,pong);
 		Agent a=new Agent(aid);
-		agentTypes.add(at1);
+		agentTypes.add(ping);
+		agentTypes.add(pong);
+		runningAgents.add(a);
 		runningAgents.add(a);
 		agentCenters.add(ac);
 		runningAID.add(aid);
+		runningAID.add(aid2);
 		
 		
 	}
