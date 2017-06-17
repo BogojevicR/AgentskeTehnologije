@@ -77,7 +77,7 @@
 		                	<tr>
 			                	<td>
 					                <select ng-model="receivers[$index]" style="width: 100%;">
-										<option ng-repeat="id in running" value="{{id}}">{{id.type.name}} : {{id.name}}</option>
+										<option ng-repeat="id in running" value="{{id}}">{{id.type.name}} - {{id.name}}</option>
 									</select>
 								</td>
 								<td align="right" ng-if="$index == 0" width="20px">					    
@@ -191,10 +191,10 @@
 						<td >
 							{{ id.host.address}}
 						</td>
-						<td align="center" ng-if="id.host.address == hostport">
-							<button ng-click="stopAgent(id)">Stop</button>
+						<td align="center" ng-if="id.host.address == host">
+							<button ng-click="stopAgent(id.name)">Stop</button>
 						</td>
-						<td align="center" ng-if="id.host.address != hostport">
+						<td align="center" ng-if="id.host.address != host">
 							<font size=1>Not my</font>
 						</td>
 					</tr>

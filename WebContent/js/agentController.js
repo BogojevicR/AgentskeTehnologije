@@ -23,6 +23,9 @@ function($http,$scope,$rootScope, agentService, $window) {
 		var index = location.indexOf("//");
 		host = location.substr(index+2);
 		host = host.substr(0, host.indexOf("/"));
+		
+		
+		
 		$scope.addReceiver();
 		$scope.getPerformative();
 		$scope.getClasses();
@@ -33,6 +36,8 @@ function($http,$scope,$rootScope, agentService, $window) {
 		console.log(host);
 	}
 	
+
+	
 	$scope.createAgent = function(agentName, agentType) {
 		console.log("Agent name: "+agentName)
 		console.log("Agent type: "+agentType)
@@ -40,7 +45,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 		if (agentName == "" || agentType == "") return;
 		agentService.createAgent(agentName,agentType, location).then(function(response) {
 			console.log("Success");
-			getRunning();
+			$scope.getRunning();
 		},function(response) {
 			console.log("Error");
 		})
@@ -49,7 +54,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 	$scope.stopAgent = function(aid) {
 		agentService.stopAgent(aid, location).then(function(response){
 			console.log("Success");
-			getRunning();
+			$scope.getRunning();
 		},function(response){
 			console.log("Error");
 		})

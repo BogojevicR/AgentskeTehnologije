@@ -59,17 +59,23 @@ public class AgentService {
 	@PUT
 	@Path("/running/{type}/{name}")
 	public void activateAgent(@PathParam("type")String type, @PathParam("name")String name) {
-		
+		System.out.println("USAO U REST CREATE AGENT");
 		//TODO: ZAVRSI POKRATANJE AGENATA
+		Data.addRunningAID(new AID(name, Data.getCurrentCenter(), new AgentType(type, type)));
 	}
+
 	
 	//zaustavi odredenog agenta
 	@DELETE
 	@Path("/running/{aid}")
 	public void stopAgent(@PathParam("aid")String aidJSON) throws JsonParseException, JsonMappingException, IOException {
+		System.out.println(aidJSON);
+		for(AID a:Data.getRunningAID()){
+			if(a.getName().equals(aidJSON)){
+				Data.stopAgent(a);
+			}
+		}
 		
-		AID aid = new ObjectMapper().readValue(aidJSON, AID.class);
-		AID retAID = Data.stopAgent(aid);
 	}
 	
 	

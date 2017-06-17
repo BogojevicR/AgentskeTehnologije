@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 
 public class AgentType implements Serializable {
+	
 
 	private String name;
 	private String module;
+
 	
 public AgentType() {
 		

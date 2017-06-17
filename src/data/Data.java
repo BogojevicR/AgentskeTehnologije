@@ -19,9 +19,11 @@ public class Data {
 	private static List<Agent> runningAgents = new ArrayList<>();
 	private static List<AgentCenter> agentCenters = new ArrayList<>();
 	private static List<AID> runningAID = new ArrayList<>();
+	private static AgentCenter currentCenter=new AgentCenter();
 	
 	static {
 		AgentCenter ac=new AgentCenter("localhost:8080","localhost:8080");
+		currentCenter=ac;
 		CenterInfo.setAgentCenter(ac);
 		AgentType ping=new AgentType("Ping","Ping");
 		AgentType pong=new AgentType("Pong","Pong");
@@ -42,6 +44,13 @@ public class Data {
 	//AGENT TYPES
 	public static List<AgentType> getAgentTypes() {
 		return agentTypes;
+	}
+	
+	public static AgentCenter getCurrentCenter(){
+		return currentCenter;
+	}
+	public static void setCurrentCenter(AgentCenter curr){
+		currentCenter=curr;
 	}
 	
 	public static AgentType getAgentType(String name) {
@@ -104,7 +113,7 @@ public class Data {
 	public static AID stopAgent(AID aid) {
 		for (Agent ag : runningAgents) {
 			if (ag.getId().matches(aid)) {
-				runningAgents.remove(ag);
+				runningAID.remove(ag);
 				return ag.getId();
 			}
 		}

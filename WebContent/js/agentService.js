@@ -5,14 +5,18 @@ var services = angular.module('agent.services',['ngResource']);
 
 services.service('agentService', ['$http', '$rootScope', 
 	function($http, $rootScope) {
+	
+	
+	
+	
 		this.createAgent = function (agentName, agentType, location) {
-			return $http.post(location + "/rest/agents/running/"+agentType+"/"+agentName);
+			return $http.put(location + "rest/agents/running/"+agentType+"/"+agentName);
 		}
 		
 		this.stopAgent = function(aid, location) {
 			return $http({
 				method: 'DELETE',
-				url: location+"rest/agents/running/"+JSON.stringify(aid)
+				url: location+"rest/agents/running/"+aid
 			})
 		}
 		

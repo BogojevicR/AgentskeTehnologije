@@ -12,9 +12,7 @@ import models.Agent;
 
 @Stateful
 public class Pong extends Agent{
-	public Pong() {
-		
-	}
+	public Pong() {}
 	
 	public Pong(String name) {
 		AID aid = new AID();
