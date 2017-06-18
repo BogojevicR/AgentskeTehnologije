@@ -1,6 +1,8 @@
 package services;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,6 +18,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import data.Data;
 import helper.Message;
 import models.ACLMessage;
 
@@ -31,7 +34,6 @@ public class MessageService {
 	public void postMessages(String messageJSON) throws JsonParseException, JsonMappingException, IOException {
 		ACLMessage message = new ObjectMapper().readValue(messageJSON, ACLMessage.class);
 		Message.sendMessage(message);
-		//TODO: ZAVRSI SLANJE PORUKE 
 	}
 	
 	
@@ -41,6 +43,25 @@ public class MessageService {
 	public String getPerformative() throws JsonGenerationException, JsonMappingException, IOException {
 		
 		return new ObjectMapper().writeValueAsString(new ArrayList<ACLMessage.Performative>(Arrays.asList(ACLMessage.Performative.values())));
+		
+	}
+	
+	
+	@GET
+	@Path("/console")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getConsole() throws JsonGenerationException, JsonMappingException, IOException {
+		
+		return new ObjectMapper().writeValueAsString(Data.getConsole());
+		
+	}
+	
+	@GET
+	@Path("/ACL")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getACL() throws JsonGenerationException, JsonMappingException, IOException {
+		
+		return new ObjectMapper().writeValueAsString(Data.getMessages());
 		
 	}
 

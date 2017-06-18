@@ -1,9 +1,13 @@
 package pingpong;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.ejb.Stateful;
 
 import data.Data;
 import helper.CenterInfo;
+import helper.ConsoleMessage;
 import helper.Message;
 import models.ACLMessage;
 import models.AID;
@@ -25,18 +29,26 @@ public class Ping extends Agent {
 	@Override
 	public void handleMessage(ACLMessage message) {
 		if(message.getPerformative() == Performative.REQUEST) {
+
 			AID aid = Data.getAIDByName(message.getContent());
 			if (aid == null) {
 				return;
 			}
 			ACLMessage msg = new ACLMessage(Performative.REQUEST);
-			message.setSender(getId());
-			message.addReceiver(aid);
-			System.out.println("Ping: Request received.");
-			Message.sendMessage(message);
+			msg.setSender(getId());
+			msg.addReceiver(aid);
+			System.out.println("Ping: Request recived");
+			Data.addConsoleMessage(new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived").getMessage());
+			
+			Message.sendMessage(msg);
+			
+			
 		} else if (message.getPerformative()==Performative.INFORM) {
 			ACLMessage msg = message;
 			System.out.println("Ping: Pong responded.");
+			Data.addConsoleMessage(new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+":"
+			+msg.getSender().getType().getName()+"-"+msg.getSender().getName()+" responded").getMessage());
+			
 		}
 	}
 

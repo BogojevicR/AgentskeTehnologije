@@ -12,6 +12,7 @@ import java.util.Set;
 
 
 import helper.CenterInfo;
+import models.ACLMessage;
 import models.AID;
 import models.Agent;
 import models.AgentCenter;
@@ -26,6 +27,8 @@ public class Data {
 	private static List<AgentCenter> agentCenters = new ArrayList<>();
 	//private static List<AID> runningAID = new ArrayList<>();
 	private static AgentCenter currentCenter=new AgentCenter();
+	private static List<ACLMessage> messages=new ArrayList<>();
+	private static List<String> console=new ArrayList<>();
 	
 /*	static {
 		AgentCenter ac=new AgentCenter("localhost:8080","localhost:8080");
@@ -243,6 +246,30 @@ public class Data {
 			if(!exists)
 				Data.cache.put(pong.getId(), pong);
 		} 
+	}
+
+	public static List<ACLMessage> getMessages() {
+		return messages;
+	}
+
+	public static void setMessages(List<ACLMessage> messages) {
+		Data.messages = messages;
+	}
+	
+	public static void addACLMessage(ACLMessage acl){
+		Data.messages.add(acl);
+	}
+	
+	public static List<String> getConsole() {
+		return console;
+	}
+
+	public static void setConsole(List<String> messages) {
+		Data.console = messages;
+	}
+	
+	public static void addConsoleMessage(String msg){
+		Data.console.add(msg);
 	}
 
 	

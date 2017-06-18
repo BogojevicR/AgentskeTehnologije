@@ -7,7 +7,9 @@ services.service('agentService', ['$http', '$rootScope',
 	function($http, $rootScope) {
 	
 	
-	
+		this.getConsole = function(location) {
+			return $http.get(location + "rest/messages/console");
+		}
 	
 		this.createAgent = function (agentName, agentType, location) {
 			return $http.put(location + "rest/agents/running/"+agentType+"/"+agentName);
@@ -35,6 +37,8 @@ services.service('agentService', ['$http', '$rootScope',
 		this.getPerformative = function(location) {
 			return $http.get(location + "rest/messages");
 		}
+		
+		
 		
 		this.sendACLMessage = function(ACLMessage, location) {
 			return $http.post(location + "rest/messages", ACLMessage);

@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html ng-app="agentApp" ng-controller="agentController">
 <head>
+<style>
+body {
+    background-image: url(pictures/minimal2.jpg);
+    background-position: center top;
+    background-repeat: no-repeat;
+    
+    box-sizing: border-box;
+    
+    overflow: visible;
+   
+}
+</style>
 <meta charset="ISO-8859-1">
 <title>AgentApp</title>
 	<script src="js/jquery-1.11.0.js"></script>
@@ -195,7 +207,7 @@
 							<button ng-click="stopAgent(id.name)">Stop</button>
 						</td>
 						<td align="center" ng-if="id.host.address != host">
-							<font size=1>Not my</font>
+							<font size=1>Forbidden</font>
 						</td>
 					</tr>
 				</table>
@@ -204,8 +216,18 @@
 	</div>
  		</td>
  	</tr>
- 
 </table>
+
+
+		
+		<h2 align="center">Console messages</h2>
+		<table border=1 style="display:block; width: 100%; overflow: auto; height: 300px" >
+			<tr ng-repeat="msg in console track by $index">
+				<td style="border: none">{{ msg }}</font></td>
+			</tr>
+		</table>
+		
+	
 
 </body>
 </html>

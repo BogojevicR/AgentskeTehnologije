@@ -10,11 +10,12 @@ function($http,$scope,$rootScope, agentService, $window) {
 	
 	var host;
 	
-	$scope.consoleMessages = [];
+	$scope.console = [];
 	$scope.running = [];
 	$scope.centers = [];
 	$scope.types = [];
 	$scope.receivers=[];
+	
 	
 	
 	$scope.init = function() {
@@ -28,13 +29,17 @@ function($http,$scope,$rootScope, agentService, $window) {
 		
 		$scope.addReceiver();
 		$scope.getPerformative();
+		$scope.getConsole();
 		$scope.getClasses();
 		$scope.getRunning();
 		$scope.addReceiver();
 		$rootScope.host = host;
 		
+		
 		console.log(host);
 	}
+	
+	
 	
 
 	
@@ -46,6 +51,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 		agentService.createAgent(agentName,agentType, location).then(function(response) {
 			console.log("Success");
 			$scope.getRunning();
+			$scope.getConsole();
 		},function(response) {
 			console.log("Error");
 		})
@@ -55,6 +61,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 		agentService.stopAgent(aid, location).then(function(response){
 			console.log("Success");
 			$scope.getRunning();
+			$scope.getConsole();
 		},function(response){
 			console.log("Error");
 		})
@@ -96,6 +103,10 @@ function($http,$scope,$rootScope, agentService, $window) {
 		})
 	}
 	
+	
+	
+	
+	
 	$scope.addReceiver = function() {
 		$rootScope.receivers.push("");
 		$rootScope.$apply;
@@ -106,6 +117,16 @@ function($http,$scope,$rootScope, agentService, $window) {
 		if (id > -1) {
 			$rootScope.receivers.splice(id, 1);
 		}
+	}
+	
+	$scope.getConsole = function() {
+		agentService.getConsole(location).then(function(response) {
+			console.log("Success");
+			$scope.console = response.data;
+			$scope.$apply;
+		}, function(response) {
+			console.log("Error");
+		})
 	}
 	
 	$scope.sendACLMessage = function(perform, sender, replyTo, content, language, encoding,
@@ -159,12 +180,14 @@ function($http,$scope,$rootScope, agentService, $window) {
 		var acl = JSON.stringify(aclMessageJSON);
 		agentService.sendACLMessage(acl, location).then(function(response){
 			console.log(response);
+			$scope.getConsole();
+			$scope.$apply;
 	/*		document.getElementByClassName(".newAgentName").value = "";*/
 		}, function(response) {
 			console.log("error");
 		})
 		 
-	
+		
 	}
 	
 	function checkForUndefined(parameter) {
@@ -175,6 +198,8 @@ function($http,$scope,$rootScope, agentService, $window) {
 			return parameter;
 		}
 	}
+	
+	
 	
 	
 }])
