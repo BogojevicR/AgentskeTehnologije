@@ -69,7 +69,6 @@ public class AgentService {
 	@DELETE
 	@Path("/running/{aid}")
 	public void stopAgent(@PathParam("aid")String aidJSON) throws JsonParseException, JsonMappingException, IOException {
-		System.out.println(aidJSON);
 		for(AID a:Data.getRunningAID()){
 			if(a.getName().equals(aidJSON)){
 				Data.stopAgent(a);

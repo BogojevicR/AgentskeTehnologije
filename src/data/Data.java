@@ -111,10 +111,12 @@ public class Data {
 	}
 	
 	public static AID stopAgent(AID aid) {
-		for (Agent ag : runningAgents) {
-			if (ag.getId().matches(aid)) {
+		System.out.println(aid.getName() + aid.getHost() + aid.getType());
+		for (AID ag : runningAID) {
+			if (ag.getName().equals(aid.getName())) {
+				System.out.println(aid);
 				runningAID.remove(ag);
-				return ag.getId();
+				return ag;
 			}
 		}
 		return null;
