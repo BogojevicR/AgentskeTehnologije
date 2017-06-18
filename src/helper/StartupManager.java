@@ -1,11 +1,10 @@
-package init;
+package helper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import data.Data;
-import helper.CenterInfo;
 import models.AID;
 import models.Agent;
 import models.AgentCenter;
