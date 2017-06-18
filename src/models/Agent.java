@@ -23,7 +23,7 @@ public class Agent {
 	}
 	
 	public void handleMessage(ACLMessage message) {
-		
+
 	}
  
 }

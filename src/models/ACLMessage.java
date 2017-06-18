@@ -58,6 +58,8 @@ public class ACLMessage {
 	private String inReplyTo;
 	private long replyBy;
 	
+	public ACLMessage() {}
+	
 	public ACLMessage(Performative performative) {
 		this.performative = performative;
 		this.receivers = new ArrayList<>();

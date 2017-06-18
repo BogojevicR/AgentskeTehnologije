@@ -17,7 +17,7 @@ public class Message {
 				}
 			}
 			if (exists) {
-				AgentCenterService.sendChangeToSpecific("/synchronize/new_message", message, center);
+				AgentCenterService.sendChangeToSpecific("/center/new_message", message, center);
 			}
 		}
 		//new SendJMSMessage(Converter.getJSONString(message));

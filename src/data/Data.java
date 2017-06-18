@@ -1,27 +1,33 @@
 package data;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 
 import helper.CenterInfo;
 import models.AID;
 import models.Agent;
 import models.AgentCenter;
 import models.AgentType;
+import pingpong.Ping;
+import pingpong.Pong;
 
 public class Data {
-    //TODO: OBRISI RUNINGAGENTS I SVE U VEZI SA NJIM, PREBACI SVE U AID i DODAJ METODE KOJE FALE
+	public static HashMap<AID, Agent> cache = new HashMap<>();
 	private static List<AgentType> agentTypes = new ArrayList<>();
-	private static List<Agent> runningAgents = new ArrayList<>();
+	//private static List<Agent> runningAgents = new ArrayList<>();
 	private static List<AgentCenter> agentCenters = new ArrayList<>();
-	private static List<AID> runningAID = new ArrayList<>();
+	//private static List<AID> runningAID = new ArrayList<>();
 	private static AgentCenter currentCenter=new AgentCenter();
 	
-	static {
+/*	static {
 		AgentCenter ac=new AgentCenter("localhost:8080","localhost:8080");
 		currentCenter=ac;
 		CenterInfo.setAgentCenter(ac);
@@ -40,7 +46,7 @@ public class Data {
 		
 		
 	}
-	
+	*/
 	//AGENT TYPES
 	public static List<AgentType> getAgentTypes() {
 		return agentTypes;
@@ -87,38 +93,42 @@ public class Data {
 	
 	//RUNNING AGENTS
 	
-	public static List<Agent> getRunningAgents() {
-		return runningAgents;
+	public static Collection<Agent> getRunningAgents() {
+		return (Collection<Agent>) cache.values();
 	}
 	
-	public static void setRunningAgents(List<Agent> runningAgents) {
-		Data.runningAgents = runningAgents;
-	}
-	
-	public static boolean addRunningAgent(Agent runningAgent) {
-		if ("".equals(runningAgent.getId().getName())) {
-			return false;
+	public static void setRunningAgents(Agent[] runningAgents) {
+		//Data.runningAgents.clear();
+		for (Agent agent : runningAgents) {
+			Data.cache.put(agent.getId(), agent);
+			//Data.runningAgents.add(agent);
 		}
-		for (Agent agent : Data.runningAgents) {
-			if (agent.getId().matches(runningAgent.getId())) {
-				return false;
+	
+	}
+	
+	public static void addRunningAgents(Agent[] runningAgents) {
+		for (Agent a1 : runningAgents) {
+			boolean exists = false;
+			for (Agent a2 : Data.cache.values()) {
+				if (a1.getId().matches(a2.getId())) {
+					exists = true;
+				}
+			}
+			if (!exists) {
+				Data.cache.put(a1.getId(), a1);
 			}
 		}
-		Data.getRunningAgents().add(runningAgent);
-		
-		return true;
-
 	}
 	
 	public static AID stopAgent(AID aid) {
-		System.out.println(aid.getName() + aid.getHost() + aid.getType());
-		for (AID ag : runningAID) {
+		boolean exists = false;
+		for (AID ag : cache.keySet()) {
 			if (ag.getName().equals(aid.getName())) {
-				System.out.println(aid);
-				runningAID.remove(ag);
-				return ag;
+				exists = true;
 			}
 		}
+		if(exists)
+			cache.remove(aid);
 		return null;
 	}
 	
@@ -184,36 +194,55 @@ public class Data {
 		return null;
 	}
 	
-	public static List<AID> getRunningAID() {
-		return runningAID;
-	}
-
-	public static void setRunningAID(List<AID> runningAID) {
-		Data.runningAID = runningAID;
+	public static Set<AID> getRunningAID() {
+		return cache.keySet();
 	}
 	
 	public static void addRunningAID(AID newAID) {
 		boolean exists = false;
-		for (AID aid : Data.runningAID) {
+		for (AID aid : Data.cache.keySet()) {
 			if (aid.matches(newAID)) {
 				exists = true;
 				break;
 			}
 		}
 		if (!exists) {
-			Data.runningAID.add(newAID);
+			Agent agent = new Agent(newAID);
+			Data.cache.put(newAID, agent);
 		}
 		
 	}
 	
 	public static void removeAID(AID newAID) {
-		for (AID aid : Data.runningAID) {
+		for (AID aid : Data.cache.keySet()) {
 			if (aid.matches(newAID)) {
-				Data.runningAID.remove(aid);
+				Data.cache.remove(aid);
 				return;
 			}
 		}
 		
+	}
+	
+	public static void addAgent(String typeName, String agentName) {
+		if (Ping.class.getSimpleName().equals(typeName)) {
+			Ping ping = new Ping(agentName);
+			AID aid = ping.getId(); 
+			boolean exists = false;
+			for(Agent ag : Data.getRunningAgents())
+				if(ag.getId().matches(aid))
+					exists = true;
+			if(!exists)
+				Data.cache.put(ping.getId(), ping);
+		} else if (Pong.class.getSimpleName().equals(typeName)) {
+			Pong pong = new Pong(agentName);
+			AID aid = pong.getId(); 
+			boolean exists = false;
+			for(Agent ag : Data.getRunningAgents())
+				if(ag.getId().matches(aid))
+					exists = true;
+			if(!exists)
+				Data.cache.put(pong.getId(), pong);
+		} 
 	}
 
 	

@@ -110,7 +110,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 	
 	$scope.sendACLMessage = function(perform, sender, replyTo, content, language, encoding,
 										ontology, protocol, conversationId, replyWith, replyBy) {
-		if(sender == undefined) consol.log("sender is undefined");
+		if(sender == undefined) console.log("sender is undefined");
 		
 		console.log("ACLMessage: " + perform + sender + replyTo + content + language + encoding +
 										ontology + protocol + conversationId + replyWith + replyBy);
@@ -159,7 +159,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 		var acl = JSON.stringify(aclMessageJSON);
 		agentService.sendACLMessage(acl, location).then(function(response){
 			console.log(response);
-			document.getElementByClassName(".newAgentName").value = "";
+	/*		document.getElementByClassName(".newAgentName").value = "";*/
 		}, function(response) {
 			console.log("error");
 		})

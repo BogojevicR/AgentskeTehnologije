@@ -32,6 +32,7 @@ public class MDBConsumer implements MessageListener {
 	public void onMessage(Message message) {
 		if (message instanceof TextMessage) {
             TextMessage tm = (TextMessage) message;
+
             try {
                 String text = tm.getText();
 

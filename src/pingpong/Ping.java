@@ -32,10 +32,11 @@ public class Ping extends Agent {
 			ACLMessage msg = new ACLMessage(Performative.REQUEST);
 			message.setSender(getId());
 			message.addReceiver(aid);
-			
+			System.out.println("Ping: Request received.");
 			Message.sendMessage(message);
 		} else if (message.getPerformative()==Performative.INFORM) {
 			ACLMessage msg = message;
+			System.out.println("Ping: Pong responded.");
 		}
 	}
 
