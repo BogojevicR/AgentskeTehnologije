@@ -21,7 +21,7 @@ public class Data {
 	private static List<AID> runningAID = new ArrayList<>();
 	private static AgentCenter currentCenter=new AgentCenter();
 	
-	static {
+/*	static {
 		AgentCenter ac=new AgentCenter("localhost:8080","localhost:8080");
 		currentCenter=ac;
 		CenterInfo.setAgentCenter(ac);
@@ -40,7 +40,7 @@ public class Data {
 		
 		
 	}
-	
+	*/
 	//AGENT TYPES
 	public static List<AgentType> getAgentTypes() {
 		return agentTypes;
@@ -111,14 +111,14 @@ public class Data {
 	}
 	
 	public static AID stopAgent(AID aid) {
-		System.out.println(aid.getName() + aid.getHost() + aid.getType());
+		AID remove = null;
 		for (AID ag : runningAID) {
 			if (ag.getName().equals(aid.getName())) {
-				System.out.println(aid);
-				runningAID.remove(ag);
-				return ag;
+				remove = ag;
 			}
 		}
+		if(remove!=null)
+			runningAID.remove(remove);
 		return null;
 	}
 	
