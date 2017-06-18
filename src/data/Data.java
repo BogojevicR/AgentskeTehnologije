@@ -14,7 +14,7 @@ import models.AgentCenter;
 import models.AgentType;
 
 public class Data {
-
+    //TODO: OBRISI RUNINGAGENTS I SVE U VEZI SA NJIM, PREBACI SVE U AID i DODAJ METODE KOJE FALE
 	private static List<AgentType> agentTypes = new ArrayList<>();
 	private static List<Agent> runningAgents = new ArrayList<>();
 	private static List<AgentCenter> agentCenters = new ArrayList<>();
