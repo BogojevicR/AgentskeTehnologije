@@ -19,15 +19,13 @@ public class StartupManager {
 		AgentCenter ac=new AgentCenter("localhost:8080","localhost:8080");
 		Data.setCurrentCenter(ac);
 		CenterInfo.setAgentCenter(ac);
+		
 		AgentType ping=new AgentType("Ping","Ping");
 		AgentType pong=new AgentType("Pong","Pong");
-		AID aid=new AID("Ping",ac,ping);
-		AID aid2=new AID("Pong",ac,pong);
-		Agent a=new Agent(aid);
+
 		Data.getAgentTypes().add(ping);
 		Data.getAgentTypes().add(pong);
 		Data.addAgentCenter(ac);
-		Data.addRunningAID(aid);
-		Data.addRunningAID(aid2);
+
 	}
 }

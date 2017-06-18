@@ -59,9 +59,9 @@ public class AgentService {
 	@PUT
 	@Path("/running/{type}/{name}")
 	public void activateAgent(@PathParam("type")String type, @PathParam("name")String name) {
-		System.out.println("USAO U REST CREATE AGENT");
 		//TODO: ZAVRSI POKRATANJE AGENATA
-		Data.addRunningAID(new AID(name, Data.getCurrentCenter(), new AgentType(type, type)));
+		Data.addAgent(type, name);
+		//Data.addRunningAID(aid);
 	}
 
 	
@@ -75,8 +75,11 @@ public class AgentService {
 				stop = true;
 			}
 		}
-		if(stop==true)
-			Data.stopAgent(Data.getAIDByName(aidJSON));
+		if(stop==true) {
+			AID aid = Data.getAIDByName(aidJSON);
+			Data.stopAgent(aid);
+		}
+			
 		
 	}
 	

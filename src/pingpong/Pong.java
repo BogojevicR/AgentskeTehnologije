@@ -26,7 +26,9 @@ public class Pong extends Agent{
 	public void handleMessage(ACLMessage message) {
 		if(message.getPerformative() == Performative.REQUEST) {
 			ACLMessage reply  = message.makeReply(Performative.INFORM);
+			reply.setContent(message.getContent());
 			Message.sendMessage(reply);
+			System.out.println("Pong: Request received.");
 		}
 	}
 }
