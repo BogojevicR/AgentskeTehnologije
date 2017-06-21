@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+import contractnetprotocol.Initiator;
+import contractnetprotocol.Participant;
 import helper.CenterInfo;
+import helper.ConsoleMessage;
 import mapreduce.MapReduce;
 import mapreduce.WordCounter;
 import models.ACLMessage;
@@ -58,6 +60,7 @@ public class Data {
 			}
 		}
 		Data.getAgentTypes().add(agentTypes);
+		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getMasterAddress()+" has created AgentType named: "+agentTypes.getName()).getMessage());
 		return true;
 	
 	}
@@ -130,6 +133,7 @@ public class Data {
 			}
 		}
 		Data.agentCenters.add(agentCenter);
+		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+"has joined!").getMessage());
 	}
 	
 	public static void removeAgentCenter(AgentCenter agentCenter) {
@@ -243,7 +247,27 @@ public class Data {
 					exists = true;
 			if(!exists)
 				Data.cache.put(wc.getId(), wc);
-		} 
+		}else if(Initiator.class.getSimpleName().equals(typeName)){
+			
+			Initiator in=new Initiator(agentName);
+			AID aid=in.getId();
+			boolean exists = false;
+			for(Agent ag : Data.getRunningAgents())
+				if(ag.getId().matches(aid))
+					exists = true;
+			if(!exists)
+				Data.cache.put(in.getId(), in);		
+		}else if(Participant.class.getSimpleName().equals(typeName)){
+			Participant p=new Participant(agentName);
+			AID aid=p.getId();
+			boolean exists = false;
+			for(Agent ag : Data.getRunningAgents())
+				if(ag.getId().matches(aid))
+					exists = true;
+			if(!exists)
+				Data.cache.put(p.getId(), p);		
+			
+		}
 		
 		
 	}

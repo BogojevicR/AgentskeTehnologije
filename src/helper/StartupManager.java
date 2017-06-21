@@ -38,7 +38,8 @@ public class StartupManager {
 				AgentCenter ac=new AgentCenter(getHostName(),getCurrentAddress());
 				CenterInfo.setAgentCenter(ac);
 				
-				setTypes();
+				
+				
 				if (!CenterInfo.getMasterAddress().equals(getCurrentAddress())) {
 					CenterInfo.MASTER = false;
 					//initialHandshake(currentAddress, masterAddress);
@@ -47,6 +48,8 @@ public class StartupManager {
 				}
 				
 				Data.addAgentCenter(ac);
+				setTypes();
+				
 			}  catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
 					| ReflectionException | MBeanException e) {
 				e.printStackTrace();
@@ -68,15 +71,19 @@ public class StartupManager {
 			return "unknown-PC";
 		}
 	}
-	
+	//obrisao poruke sa konzole
 	private void setTypes() {
 		AgentType ping = new AgentType("Ping",CenterInfo.getAgentCenter().getAddress());
 		AgentType pong = new AgentType("Pong",CenterInfo.getAgentCenter().getAddress());
 		AgentType mapreduce = new AgentType("MapReduce",CenterInfo.getAgentCenter().getAddress());
+		AgentType initiator = new AgentType("Initiator",CenterInfo.getAgentCenter().getAddress());
+		AgentType participant = new AgentType("Participant",CenterInfo.getAgentCenter().getAddress());
 		
 		Data.addAgentType(ping);
 		Data.addAgentType(pong);
 		Data.addAgentType(mapreduce);
+		Data.addAgentType(initiator);
+		Data.addAgentType(participant);
 	}
 	
 }
