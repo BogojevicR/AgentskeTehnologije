@@ -83,8 +83,6 @@ public class AgentService {
 			Data.stopAgent(aid);
 			Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has deleted "+ aid.getName()+" Agent").getMessage());
 		}
-			
-		
 	}
 	
 	

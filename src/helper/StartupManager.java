@@ -46,7 +46,6 @@ public class StartupManager {
 					CenterInfo.MASTER = true;
 				}
 				
-				Data.addConsoleMessage(new ConsoleMessage(ac.getAddress()+ " has connected").getMessage());
 				Data.addAgentCenter(ac);
 			}  catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
 					| ReflectionException | MBeanException e) {
@@ -73,13 +72,11 @@ public class StartupManager {
 	private void setTypes() {
 		AgentType ping = new AgentType("Ping",CenterInfo.getAgentCenter().getAddress());
 		AgentType pong = new AgentType("Pong",CenterInfo.getAgentCenter().getAddress());
-
-
-		Data.addConsoleMessage(new ConsoleMessage("Agent type " +ping.getName()+" is created on "+ping.getModule()).getMessage());
-		Data.addConsoleMessage(new ConsoleMessage("Agent type "+ pong.getName()+" is created on "+pong.getModule()).getMessage());
+		AgentType mapreduce = new AgentType("MapReduce",CenterInfo.getAgentCenter().getAddress());
 		
-		Data.getAgentTypes().add(ping);
-		Data.getAgentTypes().add(pong);
+		Data.addAgentType(ping);
+		Data.addAgentType(pong);
+		Data.addAgentType(mapreduce);
 	}
 	
 }
