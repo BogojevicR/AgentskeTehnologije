@@ -3,6 +3,7 @@ package requests;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 
 import org.apache.http.HttpResponse;
@@ -18,8 +19,67 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-public class Requests {
+import data.Data;
+import helper.CenterInfo;
+import models.AgentCenter;
 
+
+public class Requests {
+	
+	public String makePostRequestForSigningNode(String url, String jsonString, int counter, AgentCenter center) {
+		try{
+			counter++;
+			
+			HttpClient httpClient =  HttpClientBuilder.create().build();
+			HttpPost postMethod = new HttpPost(url);
+			
+			
+			if (jsonString == null) {
+				return "";
+			}
+			if (jsonString != null) {
+				StringEntity requestEntity = new StringEntity(
+					    jsonString,
+					    ContentType.APPLICATION_JSON);
+				
+				postMethod.setEntity(requestEntity);
+			}
+			
+			HttpResponse rawResponse = httpClient.execute(postMethod);
+			InputStream inputStream = rawResponse.getEntity().getContent();
+		
+			StringBuilder result = new StringBuilder();  
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+		    String line = null;  
+		    
+		    while ((line = br.readLine()) != null) {  
+		        result.append(line + "\n");  
+		    }
+		    br.close();
+			
+			return result.toString();
+		} catch (Exception e) {
+			String retVal = "";
+			if (e instanceof SocketTimeoutException) {
+				if (counter <= 2) {
+					retVal = new Requests().makePostRequest(url, jsonString);
+				} else if (counter == 2) {
+					//Printer.print(this, "Initial handshake failed: rollback in progress");
+					if (CenterInfo.MASTER) {
+						for(AgentCenter ac : Data.getAgentCenters()) {
+							new Requests().makeDeleteRequest("http://"+ac.getAddress()+"/AgentApp/rest/synchronize/node/"+center.getAddress());
+						}
+					} 
+					//Printer.print(this, "Initial handshake failed: rollback done");
+				}
+			}
+			return retVal;
+		}
+
+	}
+	
+	
 	public String makePostRequest(String url, String jsonString) {
 		try{			
 			HttpClient httpClient =  HttpClientBuilder.create().build(); //Use this instead 	

@@ -2,7 +2,9 @@ package helper;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,11 +18,21 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.AuthSchemes;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+
+
 import data.Data;
 import models.AID;
 import models.Agent;
 import models.AgentCenter;
 import models.AgentType;
+import requests.Requests;
+import services.AgentCenterService;
 
 
 @Startup
@@ -41,18 +53,25 @@ public class StartupManager {
 				setTypes();
 				if (!CenterInfo.getMasterAddress().equals(getCurrentAddress())) {
 					CenterInfo.MASTER = false;
-					//initialHandshake(currentAddress, masterAddress);
+					initialHandshake(getCurrentAddress(), CenterInfo.getMasterAddress());
 				} else {
 					CenterInfo.MASTER = true;
 				}
 				
 				Data.addAgentCenter(ac);
+				
+				heartbeat();
+				 
 			}  catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
 					| ReflectionException | MBeanException e) {
 				e.printStackTrace();
 			}
 		  }
 		}, 1*1000, 1*1000);	  
+	}
+	
+	public void initialHandshake(String currentAddress, String masterAddress) {
+		AgentCenterService.sendChangeToMaster("/center/node", Data.getAgentCenters().toArray());
 	}
 	
 	public String getCurrentAddress() throws AttributeNotFoundException, InstanceNotFoundException, MalformedObjectNameException, MBeanException, ReflectionException {
@@ -77,6 +96,37 @@ public class StartupManager {
 		Data.addAgentType(ping);
 		Data.addAgentType(pong);
 		Data.addAgentType(mapreduce);
+	}
+	
+	public void heartbeat() {
+		Timer timer = new Timer();
+
+		timer.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				for (AgentCenter agentCenter : Data.getAgentCenters()) {
+					if (!agentCenter.matches(CenterInfo.getAgentCenter())) {
+						heartbeatRequest(agentCenter);
+					}
+				}
+			}
+			
+		}, 60*1000, 60*1000);
+	}
+	
+	public void heartbeatRequest(AgentCenter agentCenter) {
+		try {			
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpGet request = new HttpGet("http://"+agentCenter.getAddress()+"/AgentApp/rest/center/node");
+			client.execute(request);
+		} catch (Exception e) {
+			if (e instanceof SocketTimeoutException) {
+				Data.removeAgentCenter(agentCenter);
+				new Requests().makeDeleteRequest("http://"+CenterInfo.getAgentCenter().getAddress()+"/AgentApp/rest/center/node/"+agentCenter.getAddress());
+			}
+		}
 	}
 	
 }

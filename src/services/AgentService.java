@@ -60,11 +60,10 @@ public class AgentService {
 	//pokreni agenta odredjenog tipa sa zadatim imenom
 	@PUT
 	@Path("/running/{type}/{name}")
-	public void activateAgent(@PathParam("type")String type, @PathParam("name")String name) {
+	public void addAgent(@PathParam("type")String type, @PathParam("name")String name) {
 		//TODO: ZAVRSI POKRATANJE AGENATA
 		Data.addAgent(type, name);
 		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has created Agent "+name+" of Agent type "+type).getMessage());
-		//Data.addRunningAID(aid);
 	}
 
 	

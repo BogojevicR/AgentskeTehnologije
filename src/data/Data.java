@@ -62,6 +62,16 @@ public class Data {
 	
 	}
 	
+	public static boolean addAgentType(AgentType[] agentTypes) {
+		boolean changed = false;
+		for(AgentType agentType: agentTypes) {
+			if(addAgentType(agentType))
+				changed = true;
+		}
+		return changed;
+	}
+	
+	
 	public static void removeFromTypes(AgentType type) {
 		for (AgentType at : Data.agentTypes) {
 			if (at.matches(type)) {
@@ -122,7 +132,12 @@ public class Data {
 	public static void setAgentCenters(List<AgentCenter> agentCenters) {
 		Data.agentCenters = agentCenters;
 	}
-	
+	public static void setAgentCenters(AgentCenter[] agentCenters) {
+		Data.agentCenters.clear();
+		for(AgentCenter ac: agentCenters) {
+			Data.addAgentCenter(ac);
+		}
+	}
 	public static void addAgentCenter(AgentCenter agentCenter) {
 		for (AgentCenter ac: Data.agentCenters) {
 			if (ac.getAddress().equals(agentCenter.getAddress())) {
