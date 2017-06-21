@@ -50,7 +50,7 @@ public class StartupManager {
 				AgentCenter ac=new AgentCenter(getHostName(),getCurrentAddress());
 				CenterInfo.setAgentCenter(ac);
 				
-				setTypes();
+				
 				if (!CenterInfo.getMasterAddress().equals(getCurrentAddress())) {
 					CenterInfo.MASTER = false;
 					initialHandshake(getCurrentAddress(), CenterInfo.getMasterAddress());
@@ -59,7 +59,7 @@ public class StartupManager {
 				}
 				
 				Data.addAgentCenter(ac);
-				
+				setTypes();
 				heartbeat();
 				 
 			}  catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
@@ -92,10 +92,15 @@ public class StartupManager {
 		AgentType ping = new AgentType("Ping",CenterInfo.getAgentCenter().getAddress());
 		AgentType pong = new AgentType("Pong",CenterInfo.getAgentCenter().getAddress());
 		AgentType mapreduce = new AgentType("MapReduce",CenterInfo.getAgentCenter().getAddress());
+		AgentType initiator = new AgentType("Initiator",CenterInfo.getAgentCenter().getAddress());
+		AgentType participant = new AgentType("Participant",CenterInfo.getAgentCenter().getAddress());
+		
 		
 		Data.addAgentType(ping);
 		Data.addAgentType(pong);
 		Data.addAgentType(mapreduce);
+		Data.addAgentType(initiator);
+		Data.addAgentType(participant);
 	}
 	
 	public void heartbeat() {
