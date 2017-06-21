@@ -22,44 +22,18 @@ import pingpong.Pong;
 
 public class Data {
 	public static HashMap<AID, Agent> cache = new HashMap<>();
+	
 	private static List<AgentType> agentTypes = new ArrayList<>();
-	//private static List<Agent> runningAgents = new ArrayList<>();
 	private static List<AgentCenter> agentCenters = new ArrayList<>();
-	//private static List<AID> runningAID = new ArrayList<>();
-	private static AgentCenter currentCenter=new AgentCenter();
+	private static Map<AgentCenter, List<AgentType>> mapClasses = new HashMap<>();	
+
 	private static List<ACLMessage> messages=new ArrayList<>();
+	
 	private static List<String> console=new ArrayList<>();
 	
-/*	static {
-		AgentCenter ac=new AgentCenter("localhost:8080","localhost:8080");
-		currentCenter=ac;
-		CenterInfo.setAgentCenter(ac);
-		AgentType ping=new AgentType("Ping","Ping");
-		AgentType pong=new AgentType("Pong","Pong");
-		AID aid=new AID("Ping",ac,ping);
-		AID aid2=new AID("Pong",ac,pong);
-		Agent a=new Agent(aid);
-		agentTypes.add(ping);
-		agentTypes.add(pong);
-		runningAgents.add(a);
-		runningAgents.add(a);
-		agentCenters.add(ac);
-		runningAID.add(aid);
-		runningAID.add(aid2);
-		
-		
-	}
-	*/
 	//AGENT TYPES
 	public static List<AgentType> getAgentTypes() {
 		return agentTypes;
-	}
-	
-	public static AgentCenter getCurrentCenter(){
-		return currentCenter;
-	}
-	public static void setCurrentCenter(AgentCenter curr){
-		currentCenter=curr;
 	}
 	
 	public static AgentType getAgentType(String name) {
@@ -272,6 +246,58 @@ public class Data {
 		Data.console.add(msg);
 	}
 
+	public static Map<AgentCenter, List<AgentType>> getMapClasses() {
+		return mapClasses;
+	}
+
+	public static void setMapClasses(Map<AgentCenter, List<AgentType>> mapClasses) {
+		Data.mapClasses = mapClasses;
+	}
+
+	public static void addToMapClasses(AgentCenter center, AgentType[] agentTypes) {
+		Data.addToMapClasses(center, Arrays.asList(agentTypes));
+	}
+	
+	public static void addToMapClasses(AgentCenter center, List<AgentType> agentTypes) {
+		Data.mapClasses.put(center, agentTypes);
+	}
+	
+	public static boolean mapOfTypesContains(AgentCenter center, AgentType type) {
+		List<AgentType> types = Data.mapClasses.get(center);
+		for (AgentType t : types) {
+			if (t.matches(type)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void removeFromMapClasses(AgentCenter center) {
+		List<AgentType> types = Data.mapClasses.get(center);
+		Set<AgentType> found = new HashSet<>();
+		Data.mapClasses.remove(center);
+		for (AgentType agentType : types) {
+			for (AgentCenter ac : Data.mapClasses.keySet()) {
+				if (mapOfTypesContains(ac, agentType)) {
+					found.add(agentType);
+				}
+			}
+		}
+		
+		if (found.size() == types.size()) {
+			for (AgentType at1 : found) {
+				boolean exists = false;
+				for (AgentType at2 : types) {
+					if (at1.matches(at2)) {
+						exists = true;
+					}
+				}
+				if (!exists) {
+					removeFromTypes(at1);
+				}
+			}
+		}
+	}
 	
 	
 

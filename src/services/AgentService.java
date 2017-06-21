@@ -17,6 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 import data.Data;
+import helper.CenterInfo;
 import helper.ConsoleMessage;
 import models.AID;
 import models.Agent;
@@ -62,7 +63,7 @@ public class AgentService {
 	public void activateAgent(@PathParam("type")String type, @PathParam("name")String name) {
 		//TODO: ZAVRSI POKRATANJE AGENATA
 		Data.addAgent(type, name);
-		Data.addConsoleMessage(new ConsoleMessage(Data.getCurrentCenter().getAddress()+" has created Agent "+name+" of Agent type "+type).getMessage());
+		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has created Agent "+name+" of Agent type "+type).getMessage());
 		//Data.addRunningAID(aid);
 	}
 
@@ -80,7 +81,7 @@ public class AgentService {
 		if(stop==true) {
 			AID aid = Data.getAIDByName(aidJSON);
 			Data.stopAgent(aid);
-			Data.addConsoleMessage(new ConsoleMessage(Data.getCurrentCenter().getAddress()+" has deleted "+ aid.getName()+" Agent").getMessage());
+			Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has deleted "+ aid.getName()+" Agent").getMessage());
 		}
 			
 		

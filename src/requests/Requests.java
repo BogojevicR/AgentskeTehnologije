@@ -10,24 +10,20 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 public class Requests {
-	/**
-	 * This method is used for all post requests
-	 * @param url - location or rest resource
-	 * @param jsonObject - object that is going to be send via post request
-	 * @return returns string of whatever rest resource returns
-	 */
+
 	public String makePostRequest(String url, String jsonString) {
-		try{
-			
+		try{			
 			HttpClient httpClient =  HttpClientBuilder.create().build(); //Use this instead 	
-			HttpPost postMethod = new HttpPost(url);
-			
+			HttpPost request = new HttpPost(url);
 			
 			if (jsonString == null) {
 				return "";
@@ -37,16 +33,10 @@ public class Requests {
 					    jsonString,
 					    ContentType.APPLICATION_JSON);
 				
-				postMethod.setEntity(requestEntity);
+				request.setEntity(requestEntity);
 			}
 			
-			RequestConfig defaultRequestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH).setExpectContinueEnabled(true).setStaleConnectionCheckEnabled(true).setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).build();
-			RequestConfig requestConfig = RequestConfig.copy(defaultRequestConfig).setSocketTimeout(3000).setConnectTimeout(3000).setConnectionRequestTimeout(3000).build();
-
-			
-			postMethod.setConfig(requestConfig);
-			
-			HttpResponse rawResponse = httpClient.execute(postMethod);
+			HttpResponse rawResponse = httpClient.execute(request);
 			InputStream inputStream = rawResponse.getEntity().getContent();
 		
 			
@@ -63,6 +53,48 @@ public class Requests {
 		} catch (Exception e) {
 			String retVal = "";
 			return retVal;
+		}
+	}
+	
+	public String makeGetRequest(String url) {
+		try {
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpGet request = new HttpGet(url);
+			HttpResponse response = client.execute(request);
+	
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			StringBuffer result = new StringBuffer();
+			String line = "";
+			
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			return result.toString();
+		} catch (Exception e) {
+			String retVal = "";
+			return retVal;
+		}
+
+	}
+	
+	public void makePutRequest(String url) {
+		try {
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpPut request = new HttpPut(url);
+			client.execute(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void makeDeleteRequest(String urlString) {
+		try {
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpDelete request = new HttpDelete(urlString);
+			client.execute(request);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
