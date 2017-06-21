@@ -12,6 +12,8 @@ import java.util.Set;
 
 
 import helper.CenterInfo;
+import mapreduce.MapReduce;
+import mapreduce.WordCounter;
 import models.ACLMessage;
 import models.AID;
 import models.Agent;
@@ -55,6 +57,7 @@ public class Data {
 				return false;
 			}
 		}
+		Data.getAgentTypes().add(agentTypes);
 		return true;
 	
 	}
@@ -202,6 +205,7 @@ public class Data {
 	
 	public static void addAgent(String typeName, String agentName) {
 		if (Ping.class.getSimpleName().equals(typeName)) {
+			
 			Ping ping = new Ping(agentName);
 			AID aid = ping.getId(); 
 			boolean exists = false;
@@ -219,7 +223,29 @@ public class Data {
 					exists = true;
 			if(!exists)
 				Data.cache.put(pong.getId(), pong);
+		} else if (MapReduce.class.getSimpleName().equals(typeName)) {
+			
+			MapReduce map = new MapReduce(agentName);
+			AID aid = map.getId(); 
+			boolean exists = false;
+			for(Agent ag : Data.getRunningAgents())
+				if(ag.getId().matches(aid))
+					exists = true;
+			if(!exists)
+				Data.cache.put(map.getId(), map);
+		} else if (WordCounter.class.getSimpleName().equals(typeName)) {
+			
+			WordCounter wc = new WordCounter(agentName);
+			AID aid = wc.getId(); 
+			boolean exists = false;
+			for(Agent ag : Data.getRunningAgents())
+				if(ag.getId().matches(aid))
+					exists = true;
+			if(!exists)
+				Data.cache.put(wc.getId(), wc);
 		} 
+		
+		
 	}
 
 	public static List<ACLMessage> getMessages() {
