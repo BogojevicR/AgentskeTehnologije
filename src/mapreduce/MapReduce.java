@@ -80,10 +80,10 @@ public MapReduce() {}
 			    	msg.setSender(getId());
 			    	List<AID> recivers=new ArrayList();
 			    	recivers.add(wordCounter.getId());
-			    	System.out.println("BROJ RECIVERA: "+recivers.size()+" NAME "+recivers.get(0).getName());
+			    	
 			    	msg.setReceivers(recivers);
 			    	msg.setContent(file.getAbsolutePath());
-			    	System.out.println(msg.getContent()+"    "+msg.getSender().getName()+"    "+msg.getReceivers().get(0).getName());
+			    	
 			    	Message.sendMessage(msg);
 			    	
 			    }
@@ -96,25 +96,44 @@ public MapReduce() {}
 				Map<String, Integer> result = new ObjectMapper().readValue(message.getContent(),  new TypeReference<HashMap<String,Integer>>() {});
 				for(String k:result.keySet()){
 					if(this.totalWords.get(k)==null){
-						this.totalWords.put(k,1);
+						this.totalWords.put(k,result.get(k));
 					}else{
+						System.out.println("PRE DODAVANJA: "+message.getSender().getName()+" slovo "+ k +" :"+totalWords.get(k));
 						this.totalWords.put(k, this.totalWords.get(k)+result.get(k));
+						System.out.println("POSLE DODAVANJA: "+message.getSender().getName()+" slovo "+ k +" :"+totalWords.get(k));
 					}
-					processed++;
+					
 				}
-			Data.addConsoleMessage(new ConsoleMessage("results: "+ new ObjectMapper().writeValueAsString(result)).getMessage());
+				processed++;
+			Data.addConsoleMessage(new ConsoleMessage(message.getReceivers().get(0).getType().getName()+"-"+message.getReceivers().get(0).getName()+" has done: "+getProcessed()+"/"+getFilecounter()+" processed:"+message.getSender().getName()+" file results: "+ new ObjectMapper().writeValueAsString(result)).getMessage());
+			if(processed==filecounter){
+				ACLMessage msg=new ACLMessage(Performative.CONFIRM);
+				msg.setSender(getId());
+				List<AID> receivers=new ArrayList();
+				receivers.add(getId());
+				msg.setReceivers(receivers);
+				Message.sendMessage(msg);
+				
+			}
+			
 			
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
+		}else if(message.getPerformative()== Performative.CONFIRM){
+			try {
+				Data.addConsoleMessage(new ConsoleMessage(message.getReceivers().get(0).getType().getName()+"-"+message.getReceivers().get(0).getName()+" has processed all files, results: "+ new ObjectMapper().writeValueAsString(totalWords)).getMessage());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			totalWords=new HashMap<>();
+			processed=0;
+			filecounter=0;
+			Data.removeFromTypes(Data.getAgentType("WordCounter"));	
 		}
-		
-		
-		
-		
-		
 	}
 
 	public int getFilecounter() {

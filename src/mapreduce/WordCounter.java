@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateful;
@@ -55,7 +57,11 @@ public class WordCounter extends Agent {
 				
 			}
 			
-			ACLMessage msg=message.makeReply(Performative.INFORM);
+			ACLMessage msg=new ACLMessage(Performative.INFORM);
+			List<AID> recivers=new ArrayList();
+			recivers.add(message.getSender());
+			msg.setReceivers(recivers);
+			msg.setSender(this.getId());
 			Data.stopAgent(getId());
 			try {
 				msg.setContent(new ObjectMapper().writeValueAsString(words));
