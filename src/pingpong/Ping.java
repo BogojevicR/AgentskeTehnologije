@@ -39,7 +39,7 @@ public class Ping extends Agent {
 			msg.addReceiver(aid);
 			System.out.println("Ping: Request recived");
 			Data.addConsoleMessage(new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived").getMessage());
-			
+			msg.setContent(message.getContent()+" please respond");
 			Message.sendMessage(msg);
 			
 			
