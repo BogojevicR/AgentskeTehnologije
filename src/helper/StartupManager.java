@@ -25,12 +25,16 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-
+import contractnetprotocol.Initiator;
+import contractnetprotocol.Participant;
 import data.Data;
+import mapreduce.MapReduce;
 import models.AID;
 import models.Agent;
 import models.AgentCenter;
 import models.AgentType;
+import pingpong.Ping;
+import pingpong.Pong;
 import requests.Requests;
 import services.AgentCenterService;
 
@@ -89,11 +93,11 @@ public class StartupManager {
 	}
 	
 	private void setTypes() {
-		AgentType ping = new AgentType("Ping",CenterInfo.getAgentCenter().getAddress());
-		AgentType pong = new AgentType("Pong",CenterInfo.getAgentCenter().getAddress());
-		AgentType mapreduce = new AgentType("MapReduce",CenterInfo.getAgentCenter().getAddress());
-		AgentType initiator = new AgentType("Initiator",CenterInfo.getAgentCenter().getAddress());
-		AgentType participant = new AgentType("Participant",CenterInfo.getAgentCenter().getAddress());
+		AgentType ping = new AgentType(Ping.class.getSimpleName(),CenterInfo.getAgentCenter().getAddress());
+		AgentType pong = new AgentType(Pong.class.getSimpleName(),CenterInfo.getAgentCenter().getAddress());
+		AgentType mapreduce = new AgentType(MapReduce.class.getSimpleName(),CenterInfo.getAgentCenter().getAddress());
+		AgentType initiator = new AgentType(Initiator.class.getSimpleName(),CenterInfo.getAgentCenter().getAddress());
+		AgentType participant = new AgentType(Participant.class.getSimpleName(),CenterInfo.getAgentCenter().getAddress());
 		
 		Data.addAgentType(ping);
 		Data.addAgentType(pong);

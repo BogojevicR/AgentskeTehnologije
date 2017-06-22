@@ -65,12 +65,22 @@ public class Data {
 	}
 	
 	public static boolean addAgentType(AgentType[] agentTypes) {
-		boolean changed = false;
-		for(AgentType agentType: agentTypes) {
-			if(addAgentType(agentType))
-				changed = true;
+		boolean retVal = false;
+		for (AgentType at1 : agentTypes) {
+			boolean exists = false;
+			for (AgentType at2 : Data.agentTypes) {
+				if (at1.matches(at2)) {
+					exists = true;
+				}
+			}
+			if (!exists) {
+				System.out.println("Dodao tip");
+				Data.agentTypes.add(at1);
+				retVal = true;
+			}
 		}
-		return changed;
+		retVal = false;
+		return retVal;
 	}
 	
 	

@@ -37,7 +37,7 @@ public AgentType() {
 	}
 	
 	public boolean matches(AgentType at) {
-		return name.equals(at.getName()) && module.equals(at.getModule());
+		return name.equals(at.getName());
 	}
 	
 	

@@ -46,16 +46,18 @@ public class AgentCenterService {
 				Data.addAgentCenter(agentCenters[0]);
 
 				System.out.println(CenterInfo.getAgentCenter().getAddress());
+				
 				// add new type if it is not already here, and if there are any changes send change to all other slaves
-
-			/*	String typesJSON = new Requests().makeGetRequest("http://"+agentCenters[0].getAddress()+"/AgentApp/rest/center/agents/classes");
+				String typesJSON = new Requests().makeGetRequest("http://"+agentCenters[0].getAddress()+"/AgentApp/rest/center/agents/classes");
 				AgentType[] agentTypes = new ObjectMapper().readValue(typesJSON, AgentType[].class);
 				Data.addToMapClasses(agentCenters[0], agentTypes);
 				boolean changes = Data.addAgentType(agentTypes);
+				System.out.println(changes);
+				System.out.println(agentCenters[0].getAddress());
 				if (changes) {
-					//sendChangeToSlaves("/agents/classes", Data.getAgentTypes());
+					sendChangeToSlaves("/agents/classes", Data.getAgentTypes());
 				}
-*/
+
 				// send new agent center to all other slaves
 				sendChangeToSlaves("/center/node", agentCenters[0]);
 
