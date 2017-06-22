@@ -47,7 +47,7 @@ public class Participant extends Agent {
 				receivers.add(message.getSender());
 				msg.setReceivers(receivers);
 				msg.setContent(Integer.toString(offer));
-				new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My offer is: !"+offer);
+				new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My offer is: "+offer+"!");
 				Message.sendMessage(msg);
 			}
 			
@@ -57,7 +57,7 @@ public class Participant extends Agent {
 			
 			
 		}else if(message.getPerformative() == Performative.ACCEPT_PROPOSAL){
-			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My bid of "+message.getContent()+" got accepted!");
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My bid got accepted!");
 			int number=new Random().nextInt(3);
 			System.out.println(number);
 			if(number==0){

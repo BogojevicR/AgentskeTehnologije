@@ -294,6 +294,7 @@ public class Data {
 				Data.cache.put(p.getId(), p);		
 			
 		}
+		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has created Agent "+agentName+" of Agent type "+typeName);
 		
 		
 	}

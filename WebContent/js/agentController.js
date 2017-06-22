@@ -9,6 +9,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 	var location = $window.location.href;
 	
 	var host;
+	var socket=false;
 	
 	$scope.console = [];
 	$scope.running = [];
@@ -16,7 +17,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 	$scope.types = [];
 	$scope.receivers=[];
 	
-	
+	var webSocket;
 	
 	$scope.init = function() {
 		console.log(location);
@@ -32,9 +33,10 @@ function($http,$scope,$rootScope, agentService, $window) {
 		$scope.getConsole();
 		$scope.getClasses();
 		$scope.getRunning();
-		$scope.addReceiver();
+		
 		$rootScope.host = host;
 		
+		startWebSocket();
 		
 		console.log(host);
 	}
@@ -44,8 +46,16 @@ function($http,$scope,$rootScope, agentService, $window) {
 
 	
 	$scope.createAgent = function(agentName, agentType) {
-		console.log("Agent name: "+agentName)
-		console.log("Agent type: "+agentType)
+		if(socket){
+			console.log("DODAO AGENTA PREKO WEB SOCKETA!")
+			var object = {      
+				     method : "PUT",
+				     adress : location+"rest/agents/running/"+encodeURIComponent(agentType)+"/"+encodeURIComponent(agentName),
+				     object : ""
+				    }
+				webSocket.send(JSON.stringify(object));
+			
+		}else{
 		
 		if (agentName == "" || agentType == "") return;
 		agentService.createAgent(agentName,agentType, location).then(function(response) {
@@ -56,7 +66,7 @@ function($http,$scope,$rootScope, agentService, $window) {
 			console.log("Error");
 		})
 	}
-	
+	}
 	$scope.stopAgent = function(aid) {
 		var aid = JSON.parse(angular.toJson(aid))
 		var strAid = JSON.stringify(aid);
@@ -199,6 +209,46 @@ function($http,$scope,$rootScope, agentService, $window) {
 		} else {
 			return parameter;
 		}
+	}
+	
+	function startWebSocket(){
+		
+		if(webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED){
+        	console.log("already opened");
+            return;
+        }
+		
+		webSocket = new WebSocket("ws://"+host+"/AgentApp/agents");
+		
+		webSocket.onopen = function(event){
+        	console.log("Connection opened");
+            // For reasons I can't determine, onopen gets called twice
+            // and the first time event.data is undefined.
+            // Leave a comment if you know the answer.
+            if(event.data === undefined)
+                return;
+            
+          /*  if (!checkRest()) {
+            	getPerformative();
+    			getCenters();
+    			getClasses();
+    			getRunning();
+            } */
+        };
+        
+        webSocket.onmessage = function(event){
+
+    		$scope.getConsole();
+    		$scope.getClasses();
+    		$scope.getRunning();
+    		$scope.$apply;
+
+        };
+
+        webSocket.onclose = function(event){
+        	console.log("onClose")
+        };
+		
 	}
 	
 	

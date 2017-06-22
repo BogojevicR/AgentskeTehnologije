@@ -81,7 +81,7 @@ public class AgentService {
 		Data.addAgent(type, name);
 		AID newAID = Data.getAIDByName(name);
 		AgentCenterService.sendChangeToAll("/center/add_agent", newAID);
-		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has created Agent "+name+" of Agent type "+type);
+		
 	}
 
 	
