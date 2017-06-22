@@ -17,11 +17,11 @@ import helper.CenterInfo;
 
 public class JMSMessage implements MessageListener{
 	
-	public JMSMessage(String chatPair) {
-		instantiateJMS(chatPair);
+	public JMSMessage(String message) {
+		instantiateJMS(message);
 	}
 	
-	private void instantiateJMS(String chatPair) {
+	private void instantiateJMS(String message) {
     	
     	try {
 			Context context = new InitialContext();
@@ -40,7 +40,7 @@ public class JMSMessage implements MessageListener{
 			// create and publish a message
 			TextMessage msg = session.createTextMessage();
 			msg.setStringProperty("host", CenterInfo.getAgentCenter().getAddress());
-			msg.setText(chatPair);
+			msg.setText(message);
 			MessageProducer producer = session.createProducer(topic);
 			producer.send(msg);
 			
