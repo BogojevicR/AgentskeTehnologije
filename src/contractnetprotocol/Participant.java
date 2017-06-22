@@ -38,7 +38,7 @@ public class Participant extends Agent {
 				List<AID> receivers=new ArrayList<>();
 				receivers.add(message.getSender());
 				msg.setReceivers(receivers);
-				Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I refuse!").getMessage());
+				new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I refuse!");
 				Message.sendMessage(msg);
 			}else{
 				ACLMessage msg=new ACLMessage(Performative.PROPOSE);
@@ -47,17 +47,17 @@ public class Participant extends Agent {
 				receivers.add(message.getSender());
 				msg.setReceivers(receivers);
 				msg.setContent(Integer.toString(offer));
-				Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My offer is: !"+offer).getMessage());
+				new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My offer is: !"+offer);
 				Message.sendMessage(msg);
 			}
 			
 		}else if(message.getPerformative() == Performative.REJECT_PROPOSAL){
-			Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My offer got rejected!").getMessage());
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My offer got rejected!");
 			
 			
 			
 		}else if(message.getPerformative() == Performative.ACCEPT_PROPOSAL){
-			Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My bid of "+message.getContent()+" got accepted!").getMessage());
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": My bid of "+message.getContent()+" got accepted!");
 			int number=new Random().nextInt(3);
 			System.out.println(number);
 			if(number==0){

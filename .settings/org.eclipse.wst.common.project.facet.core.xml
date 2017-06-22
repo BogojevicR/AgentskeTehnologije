@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
-  <runtime name="WildFly 9.x SiebogProject"/>
-  <secondary-runtime name="WildFly 9.x Project2"/>
+  <runtime name="WildFly 9.x Siebog"/>
+  <secondary-runtime name="WildFly 9.x Siebog2"/>
   <fixed facet="wst.jsdt.web"/>
   <fixed facet="jst.web"/>
   <fixed facet="java"/>

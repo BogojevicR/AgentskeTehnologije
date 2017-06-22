@@ -49,7 +49,7 @@ public MapReduce() {}
 		System.out.println("USAO U HANDLE OD MAP REDUCERA");
 		if (message.getPerformative() == Performative.REQUEST) {
 			System.out.println("USAO U REQUEST");
-			Data.addConsoleMessage(new helper.ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived").getMessage());
+			new helper.ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived");
 			File folder = new File(message.getContent());
 			File[] files=folder.listFiles();
 			
@@ -58,7 +58,7 @@ public MapReduce() {}
 				msg.setSender(getId());
 				msg.addReceiver(getId());
 				System.out.println("MapReduce: Unknown Path!");
-				Data.addConsoleMessage(new helper.ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Unknown Path!").getMessage());
+				new helper.ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Unknown Path!");
 				Message.sendMessage(msg);
 				return;
 			}
@@ -105,7 +105,7 @@ public MapReduce() {}
 					
 				}
 				processed++;
-			Data.addConsoleMessage(new ConsoleMessage(message.getReceivers().get(0).getType().getName()+"-"+message.getReceivers().get(0).getName()+" has done: "+getProcessed()+"/"+getFilecounter()+" processed:"+message.getSender().getName()+" file results: "+ new ObjectMapper().writeValueAsString(result)).getMessage());
+			new ConsoleMessage(message.getReceivers().get(0).getType().getName()+"-"+message.getReceivers().get(0).getName()+" has done: "+getProcessed()+"/"+getFilecounter()+" processed:"+message.getSender().getName()+" file results: "+ new ObjectMapper().writeValueAsString(result));
 			if(processed==filecounter){
 				ACLMessage msg=new ACLMessage(Performative.CONFIRM);
 				msg.setSender(getId());
@@ -124,7 +124,7 @@ public MapReduce() {}
 			
 		}else if(message.getPerformative()== Performative.CONFIRM){
 			try {
-				Data.addConsoleMessage(new ConsoleMessage(message.getReceivers().get(0).getType().getName()+"-"+message.getReceivers().get(0).getName()+" has processed all files, results: "+ new ObjectMapper().writeValueAsString(totalWords)).getMessage());
+				new ConsoleMessage(message.getReceivers().get(0).getType().getName()+"-"+message.getReceivers().get(0).getName()+" has processed all files, results: "+ new ObjectMapper().writeValueAsString(totalWords));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

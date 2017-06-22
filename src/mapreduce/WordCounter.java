@@ -39,7 +39,7 @@ public class WordCounter extends Agent {
 	public void handleMessage(ACLMessage message){
 		System.out.println("USAO U HANDLE OD WORD COUNTERA");
 		if(message.getPerformative()==ACLMessage.Performative.REQUEST){
-			Data.addConsoleMessage(new helper.ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived").getMessage());
+			new helper.ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived");
 			String output=filereader(message.getContent());
 			Map<String,Integer> words=new HashMap<>();
 			String[] out=output.replaceAll("[^a-zA-Z]","").toUpperCase().split("\\s+");

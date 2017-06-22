@@ -85,7 +85,7 @@ public class AgentCenterService {
 	@GET
 	@Path("/node")
 	public void checkIfAlive() {
-		Data.addConsoleMessage(new ConsoleMessage("Agent center: " + CenterInfo.getAgentCenter().getAddress()+ " is alive.").getMessage());
+		//Data.addConsoleMessage(new ConsoleMessage("Agent center: " + CenterInfo.getAgentCenter().getAddress()+ " is alive.").getMessage());
 	}
 	
 	//Master čvor traži spisak tipova agenata koje podržava nov ne-master čvor

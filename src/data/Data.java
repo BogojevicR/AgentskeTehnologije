@@ -60,7 +60,7 @@ public class Data {
 			}
 		}
 		Data.getAgentTypes().add(agentTypes);
-		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getMasterAddress()+" has created AgentType named: "+agentTypes.getName()).getMessage());
+		new ConsoleMessage(CenterInfo.getMasterAddress()+" has created AgentType named: "+agentTypes.getName());
 		return true;
 	}
 	
@@ -159,7 +159,7 @@ public class Data {
 			}
 		}
 		Data.agentCenters.add(agentCenter);
-		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+"has joined!").getMessage());
+		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+"has joined!");
 	}
 	
 	public static void removeAgentCenter(AgentCenter agentCenter) {

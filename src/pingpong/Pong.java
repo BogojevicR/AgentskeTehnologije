@@ -38,11 +38,12 @@ public class Pong extends Agent{
 			sender.add(message.getSender());
 			
 			reply.setReceivers(sender);
-			Message.sendMessage(reply);
+			
 			System.out.println("Pong: Request received.");
 
-			Data.addConsoleMessage(new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+":"
-			+message.getSender().getType().getName()+"-"+message.getSender().getName()+" sent request with content: "+message.getContent()).getMessage());
+			new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+":"
+			+message.getSender().getType().getName()+"-"+message.getSender().getName()+" sent request with content: "+message.getContent());
+			Message.sendMessage(reply);
 		}
 	}
 }

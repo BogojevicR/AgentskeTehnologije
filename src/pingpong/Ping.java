@@ -38,7 +38,7 @@ public class Ping extends Agent {
 			msg.setSender(getId());
 			msg.addReceiver(aid);
 			System.out.println("Ping: Request recived");
-			Data.addConsoleMessage(new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived").getMessage());
+			new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+ ": Request recived");
 			msg.setContent(message.getContent()+" please respond");
 			Message.sendMessage(msg);
 			
@@ -46,8 +46,8 @@ public class Ping extends Agent {
 		} else if (message.getPerformative()==Performative.INFORM) {
 			ACLMessage msg = message;
 			System.out.println("Ping: Pong responded.");
-			Data.addConsoleMessage(new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+":"
-			+msg.getSender().getType().getName()+"-"+msg.getSender().getName()+" responded").getMessage());
+			new ConsoleMessage(this.getId().getType().getName()+"-"+this.getId().getName()+":"
+			+msg.getSender().getType().getName()+"-"+msg.getSender().getName()+" responded");
 			
 		}
 	}

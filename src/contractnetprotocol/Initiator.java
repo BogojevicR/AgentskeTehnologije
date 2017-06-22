@@ -51,7 +51,7 @@ public class Initiator extends Agent{
 			participantsCounter=participants.size();
 			
 			if(participantsCounter==0){
-				Data.addConsoleMessage(new ConsoleMessage("Error, no participants found").getMessage());
+			new ConsoleMessage("Error, no participants found");
 				return;
 			}
 			ACLMessage msg=new ACLMessage(Performative.CALL_FOR_PROPOSAL);
@@ -61,7 +61,7 @@ public class Initiator extends Agent{
 		}else if(message.getPerformative()==Performative.REFUSE){
 
 			processed++;
-			Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+" :"+"Processed: "+processed+"/"+participantsCounter).getMessage());
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+" :"+"Processed: "+processed+"/"+participantsCounter);
 			if(participantsCounter==processed){
 				AID bestOffer= getBestOffer();
 				if(bestOffer!=null){
@@ -81,7 +81,7 @@ public class Initiator extends Agent{
 						}
 					}	
 				}else{
-					Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": Every Participant refused! ").getMessage());
+					new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": Every Participant refused! ");
 				}
 			}
 
@@ -90,7 +90,7 @@ public class Initiator extends Agent{
 			offers.put(message.getSender(),Integer.parseInt(message.getContent()));
 			
 			processed++;
-			Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+" :"+"Processed: "+processed+"/"+participantsCounter).getMessage());
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+" :"+"Processed: "+processed+"/"+participantsCounter);
 			if(participantsCounter==processed){
 				AID bestOffer= getBestOffer();
 				if(bestOffer!=null){
@@ -110,24 +110,24 @@ public class Initiator extends Agent{
 						}
 					}	
 				}else{
-					Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": Every Participant refused! ").getMessage());
+					new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": Every Participant refused! ");
 				}
 			}
 		
 		
 		}else if(message.getPerformative() == Performative.FAILURE) {
-			Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I accepted best offer from "+message.getSender().getName()+" but he failed to delivery!").getMessage());
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I accepted best offer from "+message.getSender().getName()+" but he failed to delivery!");
 			processed=0;
 			participantsCounter=0;
 			offers=new HashMap<>();
 		
 		}else if(message.getPerformative() == Performative.INFORM) {
-			Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I accepted best offer from "+message.getSender().getName()+" inform-done!").getMessage());
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I accepted best offer from "+message.getSender().getName()+" inform-done!");
 			processed=0;
 			participantsCounter=0;
 			offers=new HashMap<>();
 		}else if(message.getPerformative() == Performative.INFORM_REF) {
-			Data.addConsoleMessage(new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I accepted best offer from "+message.getSender().getName()+" inform-result!").getMessage());
+			new ConsoleMessage(getId().getType().getName()+"-"+getId().getName()+": I accepted best offer from "+message.getSender().getName()+" inform-result!");
 			processed=0;
 			participantsCounter=0;
 			offers=new HashMap<>();

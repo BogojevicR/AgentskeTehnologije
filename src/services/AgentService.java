@@ -81,7 +81,7 @@ public class AgentService {
 		Data.addAgent(type, name);
 		AID newAID = Data.getAIDByName(name);
 		AgentCenterService.sendChangeToAll("/center/add_agent", newAID);
-		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has created Agent "+name+" of Agent type "+type).getMessage());
+		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has created Agent "+name+" of Agent type "+type);
 	}
 
 	
@@ -91,6 +91,7 @@ public class AgentService {
 	public void stopAgent(@PathParam("aid")String aidJSON) throws JsonParseException, JsonMappingException, IOException {
 		AID aid = new ObjectMapper().readValue(aidJSON, AID.class);
 		AID retAID = Data.stopAgent(aid);
+		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has deleted "+ aid.getName()+" agent of AgentType "+aid.getType().getName());
 		if (retAID != null) {
 			AgentCenterService.sendChangeToAll("/center/stop_agent", retAID);
 		}
