@@ -58,7 +58,9 @@ function($http,$scope,$rootScope, agentService, $window) {
 	}
 	
 	$scope.stopAgent = function(aid) {
-		agentService.stopAgent(aid, location).then(function(response){
+		var aid = JSON.parse(angular.toJson(aid))
+		var strAid = JSON.stringify(aid);
+		agentService.stopAgent(strAid, location).then(function(response){
 			console.log("Success");
 			$scope.getRunning();
 			$scope.getConsole();

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -22,6 +23,7 @@ import helper.ConsoleMessage;
 import models.AID;
 import models.Agent;
 import models.AgentType;
+import sun.management.resources.agent;
 import models.AgentCenter;
 
 
@@ -34,7 +36,6 @@ public class AgentService {
 	@Path("/classes")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getClasses() throws JsonGenerationException, JsonMappingException, IOException {
-		
 		return new ObjectMapper().writeValueAsString(Data.getAgentTypes());
 	}
 	
@@ -47,7 +48,22 @@ public class AgentService {
 		return new ObjectMapper().writeValueAsString(Data.getAgentCenters());
 	}
 	
-	
+	@POST
+	@Path("/classes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean setClasses(String agentTypesJSON) {
+		if(agentTypesJSON==null)
+			return false;
+		try {
+			AgentType[] agentTypes = new ObjectMapper().readValue(agentTypesJSON, AgentType[].class);
+			Data.addAgentType(agentTypes);
+			return true;
+		} catch (IOException e) {
+			//e.printStackTrace();
+			return false;
+		}
+		
+	}
 	//dobavi sve pokrenute agente sa sistema;
 	@GET
 	@Path("/running")
@@ -63,6 +79,8 @@ public class AgentService {
 	public void addAgent(@PathParam("type")String type, @PathParam("name")String name) {
 		//TODO: ZAVRSI POKRATANJE AGENATA
 		Data.addAgent(type, name);
+		AID newAID = Data.getAIDByName(name);
+		AgentCenterService.sendChangeToAll("/center/add_agent", newAID);
 		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has created Agent "+name+" of Agent type "+type).getMessage());
 	}
 
@@ -71,16 +89,10 @@ public class AgentService {
 	@DELETE
 	@Path("/running/{aid}")
 	public void stopAgent(@PathParam("aid")String aidJSON) throws JsonParseException, JsonMappingException, IOException {
-		boolean stop = false;
-		for(AID a:Data.getRunningAID()){
-			if(a.getName().equals(aidJSON)){
-				stop = true;
-			}
-		}
-		if(stop==true) {
-			AID aid = Data.getAIDByName(aidJSON);
-			Data.stopAgent(aid);
-			Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getAgentCenter().getAddress()+" has deleted "+ aid.getName()+" Agent").getMessage());
+		AID aid = new ObjectMapper().readValue(aidJSON, AID.class);
+		AID retAID = Data.stopAgent(aid);
+		if (retAID != null) {
+			AgentCenterService.sendChangeToAll("/center/stop_agent", retAID);
 		}
 	}
 	

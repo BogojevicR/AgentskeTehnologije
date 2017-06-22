@@ -62,7 +62,6 @@ public class Data {
 		Data.getAgentTypes().add(agentTypes);
 		Data.addConsoleMessage(new ConsoleMessage(CenterInfo.getMasterAddress()+" has created AgentType named: "+agentTypes.getName()).getMessage());
 		return true;
-	
 	}
 	
 	public static boolean addAgentType(AgentType[] agentTypes) {
@@ -120,8 +119,10 @@ public class Data {
 				exists = true;
 			}
 		}
-		if(exists)
+		if(exists) {
 			cache.remove(aid);
+			return aid;
+		}
 		return null;
 	}
 	

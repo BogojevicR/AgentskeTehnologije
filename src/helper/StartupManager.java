@@ -67,7 +67,7 @@ public class StartupManager {
 				e.printStackTrace();
 			}
 		  }
-		}, 1*1000, 1*1000);	  
+		}, 1*3000, 1*3000);	  
 	}
 	
 	public void initialHandshake(String currentAddress, String masterAddress) {
@@ -94,7 +94,6 @@ public class StartupManager {
 		AgentType mapreduce = new AgentType("MapReduce",CenterInfo.getAgentCenter().getAddress());
 		AgentType initiator = new AgentType("Initiator",CenterInfo.getAgentCenter().getAddress());
 		AgentType participant = new AgentType("Participant",CenterInfo.getAgentCenter().getAddress());
-		
 		
 		Data.addAgentType(ping);
 		Data.addAgentType(pong);

@@ -19,11 +19,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import data.Data;
 import helper.CenterInfo;
+import helper.ConsoleMessage;
 import jms.JMSMessage;
 import models.AID;
 import models.AgentCenter;
 import models.AgentType;
 import requests.Requests;
+
 
 
 
@@ -42,14 +44,16 @@ public class AgentCenterService {
 			AgentCenter[] agentCenters = new ObjectMapper().readValue(agentCentersJSON, AgentCenter[].class);
 			if (CenterInfo.MASTER && agentCenters.length == 1) {
 				Data.addAgentCenter(agentCenters[0]);
-				
+
+				System.out.println(CenterInfo.getAgentCenter().getAddress());
 				// add new type if it is not already here, and if there are any changes send change to all other slaves
+
 				String typesJSON = new Requests().makeGetRequest("http://"+agentCenters[0].getAddress()+"/AgentApp/rest/center/agents/classes");
 				AgentType[] agentTypes = new ObjectMapper().readValue(typesJSON, AgentType[].class);
 				Data.addToMapClasses(agentCenters[0], agentTypes);
 				boolean changes = Data.addAgentType(agentTypes);
 				if (changes) {
-					sendChangeToSlaves("/agents/classes", Data.getAgentTypes());
+					//sendChangeToSlaves("/agents/classes", Data.getAgentTypes());
 				}
 
 				// send new agent center to all other slaves
@@ -76,32 +80,22 @@ public class AgentCenterService {
 		}
 	}
 	
+	@GET
+	@Path("/node")
+	public void checkIfAlive() {
+		Data.addConsoleMessage(new ConsoleMessage("Agent center: " + CenterInfo.getAgentCenter().getAddress()+ " is alive.").getMessage());
+	}
+	
 	//Master čvor traži spisak tipova agenata koje podržava nov ne-master čvor
 	@GET
 	@Path("/agents/classes")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getAgentTypesFromCenter(String agentCenterJSON) throws JsonGenerationException, JsonMappingException, IOException {
+	public String getAgentTypes() throws JsonGenerationException, JsonMappingException, IOException {
 		//TODO: napravi rest poziv ka hostu gde je centar i iz njegovog data pokupi tipove agenata
 		return new ObjectMapper().writeValueAsString(Data.getAgentTypes());
 	}
 	
-	//1) Master čvor dostavlja spisak novih tipova agenata (ukoliko ih ima) ostalim ne-master čvorovima;
-	//2)Master čvor dostavlja spisak tipova agenata novom ne-master čvoru koje podržava on ili neki od ostalih ne-master čvorova;
-	@POST
-	@Path("/agents/classes")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean addNewAgentTypes(String agentTypesJSON) throws JsonGenerationException, JsonMappingException, IOException{
-		try {
-			AgentType[] agentTypes = new ObjectMapper().readValue(agentTypesJSON, AgentType[].class);
-			Data.addAgentType(agentTypes);
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-	}
+
 	
 	
 	//Master čvor dostavlja spisak pokrenutih agenata novom ne-master čvoru koji se nalaze kod njega ili nekog od preostalih ne-master čvorova;
@@ -138,6 +132,29 @@ public class AgentCenterService {
 		}
 	}
 	
+	@POST
+	@Path("/add_agent")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void addAgent(String newAIDJSON) {
+		try {
+			AID newAID = new ObjectMapper().readValue(newAIDJSON, AID.class);
+			Data.addRunningAID(newAID);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@POST
+	@Path("/stop_agent")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void stopAgent(String newAIDJSON) {
+		try {
+			AID newAID = new ObjectMapper().readValue(newAIDJSON, AID.class);
+			Data.removeAID(newAID);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	//Update others methods
 	
 	public static void sendChangeToAll(String url, Object object) {
