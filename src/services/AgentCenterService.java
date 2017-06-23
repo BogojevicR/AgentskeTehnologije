@@ -22,9 +22,11 @@ import helper.CenterInfo;
 import helper.ConsoleMessage;
 import jms.JMSMessage;
 import models.AID;
+import models.Agent;
 import models.AgentCenter;
 import models.AgentType;
 import requests.Requests;
+
 
 
 
@@ -47,7 +49,7 @@ public class AgentCenterService {
 
 				System.out.println(CenterInfo.getAgentCenter().getAddress());
 				
-				// add new type if it is not already here, and if there are any changes send change to all other slaves
+				// add new types and send changes
 				String typesJSON = new Requests().makeGetRequest("http://"+agentCenters[0].getAddress()+"/AgentApp/rest/center/agents/classes");
 				AgentType[] agentTypes = new ObjectMapper().readValue(typesJSON, AgentType[].class);
 				Data.addToMapClasses(agentCenters[0], agentTypes);
@@ -58,24 +60,22 @@ public class AgentCenterService {
 					sendChangeToSlaves("/agents/classes", Data.getAgentTypes());
 				}
 
-				// send new agent center to all other slaves
+				// send new center
 				sendChangeToSlaves("/center/node", agentCenters[0]);
 
-				// send other agent centers to new slave
+				// send centers
 				String otherAgentCentersJSON = new ObjectMapper().writeValueAsString(Data.getAgentCenters());
 				new Requests().makePostRequestForSigningNode("http://"+agentCenters[0].getAddress()+"/AgentApp/rest/center/node", otherAgentCentersJSON, 0, agentCenters[0]);
 
-				// send running agents to new slave
+				// send running agents
 				String runningAgentsJSON = new ObjectMapper().writeValueAsString(Data.getRunningAID());
 				new Requests().makePostRequestForSigningNode("http://"+agentCenters[0].getAddress()+"/AgentApp/rest/center/agents/running", runningAgentsJSON, 0, agentCenters[0]);
 
 				
 			} else if (!CenterInfo.MASTER && agentCenters.length == 1) {
 				Data.addAgentCenter(agentCenters[0]);
-				//Printer.print(this, "Agent center added in slave");
 			} else if (!CenterInfo.MASTER && agentCenters.length > 1) {
 				Data.setAgentCenters(agentCenters);
-				//Printer.print(this, "Agent centers set in slave");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -157,6 +157,22 @@ public class AgentCenterService {
 			e.printStackTrace();
 		}
 	}
+	
+	@POST
+	@Path("/stop_agents")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void stopAgents(String agentsJSON) {
+		try {
+			Agent[] agents = new ObjectMapper().readValue(agentsJSON, Agent[].class);
+			for (Agent agent : agents) {
+				Data.removeAID(agent.getId());
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//Update others methods
 	
 	public static void sendChangeToAll(String url, Object object) {

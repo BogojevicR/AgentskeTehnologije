@@ -59,11 +59,11 @@ public class AgentService {
 			Data.addAgentType(agentTypes);
 			return true;
 		} catch (IOException e) {
-			//e.printStackTrace();
 			return false;
 		}
 		
 	}
+	
 	//dobavi sve pokrenute agente sa sistema;
 	@GET
 	@Path("/running")
