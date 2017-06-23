@@ -79,7 +79,7 @@ public class StartupManager {
 	
 	@PreDestroy
 	public void preDestroy() {
-		AgentCenterService.sendChangeToAll("/center/stop_agents", Data.getRunningAgents());
+		AgentCenterService.sendChangeToAll("/center/stop_agents/"+CenterInfo.getAgentCenter().getAddress(), Data.getRunningAgents());
 		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress() + " has closed!");
 		Data.removeAgentCenter(CenterInfo.getAgentCenter());
 		for(AgentCenter center : Data.getAgentCenters()) {

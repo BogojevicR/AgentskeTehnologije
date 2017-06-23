@@ -159,13 +159,14 @@ public class AgentCenterService {
 	}
 	
 	@POST
-	@Path("/stop_agents")
+	@Path("/stop_agents/{center}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void stopAgents(String agentsJSON) {
+	public void stopAgents(@PathParam("center") String center, String agentsJSON) {
 		try {
 			Agent[] agents = new ObjectMapper().readValue(agentsJSON, Agent[].class);
 			for (Agent agent : agents) {
-				Data.removeAID(agent.getId());
+				if(agent.getId().getHost().getAddress().equals(center))
+					Data.removeAID(agent.getId());
 			}
 
 		} catch (IOException e) {
