@@ -79,7 +79,7 @@ public class StartupManager {
 	
 	@PreDestroy
 	public void preDestroy() {
-
+		System.out.println("DECONSTRUCT");
 		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress() + " has closed!");
 		Data.removeAgentCenter(CenterInfo.getAgentCenter());
 		for(AgentCenter center : Data.getAgentCenters()) {

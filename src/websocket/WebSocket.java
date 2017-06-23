@@ -25,7 +25,7 @@ public class WebSocket {
 	@OnOpen
 	public void onOpen(Session session){
 		
-		System.out.println(session.getId()+" has opened connection!");
+		
 		sessions.add(session);
         
 		
@@ -33,7 +33,7 @@ public class WebSocket {
 	
 	@OnMessage
 	public void onMessage(String message,Session session){
-		System.out.println("Web Socket onMessage!");
+		
 		
 		try {
 			WebSocketRequest req=new ObjectMapper().readValue(message,WebSocketRequest.class);
@@ -61,7 +61,7 @@ public class WebSocket {
 	
 	@OnClose
 	public void onClose(Session session){
-		System.out.println("Session "+ session.getId()+" has closed!");
+		
 		sessions.remove(session);
 	}
 }
