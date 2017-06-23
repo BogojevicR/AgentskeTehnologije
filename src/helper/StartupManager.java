@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.management.AttributeNotFoundException;
@@ -25,6 +26,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+
 import contractnetprotocol.Initiator;
 import contractnetprotocol.Participant;
 import data.Data;
@@ -37,6 +39,7 @@ import pingpong.Ping;
 import pingpong.Pong;
 import requests.Requests;
 import services.AgentCenterService;
+
 
 
 @Startup
@@ -72,6 +75,16 @@ public class StartupManager {
 			}
 		  }
 		}, 1*3000, 1*3000);	  
+	}
+	
+	@PreDestroy
+	public void preDestroy() {
+
+		new ConsoleMessage(CenterInfo.getAgentCenter().getAddress() + " has closed!");
+		Data.removeAgentCenter(CenterInfo.getAgentCenter());
+		for(AgentCenter center : Data.getAgentCenters()) {
+			new Requests().makeDeleteRequest("http://"+center.getAddress()+"/AgentApp/rest/center/node/"+CenterInfo.getAgentCenter().getAddress());
+		}
 	}
 	
 	public void initialHandshake(String currentAddress, String masterAddress) {
